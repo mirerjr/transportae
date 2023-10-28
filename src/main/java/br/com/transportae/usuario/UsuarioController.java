@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,5 +55,22 @@ public class UsuarioController {
         }
 
         return ResponseEntity.ok().body(usuario.get());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> atualizar(@PathVariable BigInteger id, @RequestBody UsuarioModel usuarioModel) {
+        Optional<UsuarioModel> usuarioExistente = usuarioRepository.findById(id);
+
+        if (usuarioExistente.isEmpty()) {
+            return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap("error", "Usuário não encontrado"));
+        }
+
+        usuarioModel.setId(id);
+
+        UsuarioModel usuarioAtualizado = usuarioRepository.save(usuarioModel);
+        
+        return ResponseEntity.ok().body(usuarioAtualizado);
     }
 }
