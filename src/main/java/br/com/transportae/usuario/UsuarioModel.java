@@ -28,21 +28,22 @@ public class UsuarioModel {
     private Boolean ativo = true;
     private Boolean admin = false;
     
-    @Column(length = 255)
+    @Column(length = 255, nullable = false)
     private String nome;
     
-    @Column(length = 150)
+    @Column(length = 150, nullable = false)
     private String email;
 
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String login;
     
-    @Column(length = 11)
+    @Column(length = 11, nullable = false)
     private String cpf;
 
     @Column(length = 50)
     private String matricula;
 
+    @Column(nullable = false)
     private String senha;
 
     private LocalDate dataNascimento;
