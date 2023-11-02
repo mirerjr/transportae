@@ -26,7 +26,6 @@ public class UsuarioModel {
     private BigInteger id;
 
     private Boolean ativo = true;
-    private Boolean admin = false;
     
     @Column(length = 255, nullable = false)
     private String nome;
@@ -56,4 +55,7 @@ public class UsuarioModel {
 
     @OneToMany(mappedBy = "usuarioResponsavel")
     private List<UsuarioLogModel> alteracoesRealizadas;
+
+    @Enumerated(EnumType.STRING)
+    private Perfil perfil;    
 }
