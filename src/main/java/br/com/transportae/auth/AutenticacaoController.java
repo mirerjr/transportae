@@ -19,4 +19,9 @@ public class AutenticacaoController {
     public ResponseEntity<AutenticacaoResponse> cadastrar(@RequestBody CadastroRequest request) {
         return ResponseEntity.ok(authenticationService.cadastrar(request));
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<AutenticacaoResponse> logar(@RequestBody LoginRequest request) {
+        return ResponseEntity.ok(authenticationService.logar(request));
+    }    
 }

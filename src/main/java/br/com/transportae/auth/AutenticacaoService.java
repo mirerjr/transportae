@@ -46,5 +46,21 @@ public class AutenticacaoService {
             .build();
     }
 
+    public AutenticacaoResponse logar(LoginRequest request) {
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                request.getEmail(),
+                request.getSenha()
+            )
+        );
+
+        UsuarioModel usuarioEncontrado = usuarioRepository.findByEmail(request.getEmail()).orElseThrow();
+
+        String jwtToken = jwtService.gerarToken(usuarioEncontrado);
+
+        return AutenticacaoResponse.builder()
+            .token(jwtToken)
+            .build();
+    }
     
 }
