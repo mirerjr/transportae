@@ -45,9 +45,6 @@ public class UsuarioModel implements UserDetails {
     
     @Column(length = 150, nullable = false)
     private String email;
-
-    @Column(length = 100, nullable = false)
-    private String login;
     
     @Column(length = 11, nullable = false)
     private String cpf;
@@ -80,7 +77,7 @@ public class UsuarioModel implements UserDetails {
 
     @Override
     public String getUsername() {
-        return login;
+        return email;
     }
 
     @Override
