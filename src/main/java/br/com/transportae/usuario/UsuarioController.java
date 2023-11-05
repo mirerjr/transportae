@@ -8,6 +8,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,12 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController()
 @RequestMapping("/api/v1/usuarios")
+@EnableMethodSecurity(securedEnabled = true)
 public class UsuarioController {
 
     @Autowired
     private IUsuarioRepository usuarioRepository;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> cadastrar(@RequestBody UsuarioModel usuarioModel) {
         Optional<UsuarioModel> usuarioEncontrado = usuarioRepository.findByCpf(usuarioModel.getCpf());
 
@@ -58,6 +62,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> atualizar(@PathVariable BigInteger id, @RequestBody UsuarioModel usuarioModel) {
         Optional<UsuarioModel> usuarioExistente = usuarioRepository.findById(id);
 
