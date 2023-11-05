@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @RestController()
 @RequestMapping("/api/v1/usuarios")
 @EnableMethodSecurity(securedEnabled = true)
@@ -60,14 +62,12 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> exibir(@PathVariable BigInteger id) {
-        Optional<UsuarioModel> usuario = usuarioRepository.findById(id);
-
-        if (usuario.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok().body(usuario.get());
+    public ResponseEntity<Object> exibir(@PathVariable BigInteger id) throws EntityNotFoundException {
+        UsuarioModel usuario = usuarioRepository
+            .findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+            
+        return ResponseEntity.ok().body(usuario);
     }
 
     @PutMapping("/{id}")

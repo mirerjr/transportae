@@ -10,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
@@ -50,5 +51,17 @@ public class DefaultExceptionHandler {
         );
 
         return new ResponseEntity<ApiErrorDTO>(apiErrorDTO, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ApiErrorDTO> handleEntityNotFoundException(EntityNotFoundException exception, HttpServletRequest request) {
+        ApiErrorDTO apiErrorDTO = new ApiErrorDTO(
+            request.getRequestURI(),
+            exception.getMessage(),
+            HttpStatus.NOT_FOUND.value(),
+            LocalDateTime.now()
+        );
+
+        return new ResponseEntity<ApiErrorDTO>(apiErrorDTO, HttpStatus.NOT_FOUND);
     }
 }
