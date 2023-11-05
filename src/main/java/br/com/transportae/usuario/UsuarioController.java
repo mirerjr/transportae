@@ -28,8 +28,8 @@ public class UsuarioController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Object> cadastrar(@RequestBody UsuarioModel usuarioModel) {
-        Optional<UsuarioModel> usuarioEncontrado = usuarioRepository.findByCpf(usuarioModel.getCpf());
+    public ResponseEntity<Object> cadastrar(@Valid @RequestBody UsuarioDTO usuarioDTO) {
+        Optional<UsuarioModel> usuarioEncontrado = usuarioRepository.findByCpf(usuarioDTO.getCpf());
 
         if (usuarioEncontrado.isPresent()) {
             return ResponseEntity
@@ -37,7 +37,16 @@ public class UsuarioController {
                 .body(Collections.singletonMap("error", "Usuário já existente"));
         }
 
-        UsuarioModel usuarioCadastrado = usuarioRepository.save(usuarioModel);
+        UsuarioModel novoUsuario = UsuarioModel.builder()
+            .matricula(usuarioDTO.getMatricula())
+            .dataNascimento(usuarioDTO.getDataNascimento())
+            .nome(usuarioDTO.getNome())
+            .email(usuarioDTO.getEmail())
+            .cpf(usuarioDTO.getCpf())
+            .perfil(usuarioDTO.getPerfil())
+            .build();
+
+        UsuarioModel usuarioCadastrado = usuarioRepository.save(novoUsuario);
         
         return ResponseEntity
             .status(HttpStatus.CREATED)
