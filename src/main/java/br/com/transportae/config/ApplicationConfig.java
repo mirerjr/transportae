@@ -28,7 +28,7 @@ public class ApplicationConfig {
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
                 return usuarioRepository
                     .findByEmail(username)
-                    .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+                    .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado! Por favor, revise o email e tente novamente"));
             }
         };
     }

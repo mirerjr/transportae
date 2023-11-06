@@ -6,10 +6,15 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -51,6 +56,70 @@ public class DefaultExceptionHandler {
         );
 
         return new ResponseEntity<ApiErrorDTO>(apiErrorDTO, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ApiErrorDTO> handleUsernameNotFoundException(UsernameNotFoundException exception, HttpServletRequest request) {
+        ApiErrorDTO apiErrorDTO = new ApiErrorDTO(
+            request.getRequestURI(),
+            exception.getMessage(),
+            HttpStatus.NOT_FOUND.value(),
+            LocalDateTime.now()
+        );
+
+        return new ResponseEntity<ApiErrorDTO>(apiErrorDTO, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(SignatureException.class)
+    public ResponseEntity<ApiErrorDTO> handleSignatureException(SignatureException exception, HttpServletRequest request) {
+        String mensagem = "Chave de acesso inválida! Por favor, efetue o login novamente";
+
+        ApiErrorDTO apiErrorDTO = new ApiErrorDTO(
+            request.getRequestURI(),
+            mensagem,
+            HttpStatus.FORBIDDEN.value(),
+            LocalDateTime.now()
+        );
+
+        return new ResponseEntity<ApiErrorDTO>(apiErrorDTO, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ApiErrorDTO> handleExpiredJwtException(ExpiredJwtException exception, HttpServletRequest request) {
+        String mensagem = "Tempo de acesso expirado! Por favor, efetue o login novamente";
+
+        ApiErrorDTO apiErrorDTO = new ApiErrorDTO(
+            request.getRequestURI(),
+            mensagem,
+            HttpStatus.FORBIDDEN.value(),
+            LocalDateTime.now()
+        );
+
+        return new ResponseEntity<ApiErrorDTO>(apiErrorDTO, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiErrorDTO> handleBadCredentialsException(BadCredentialsException exception, HttpServletRequest request) {
+        ApiErrorDTO apiErrorDTO = new ApiErrorDTO(
+            request.getRequestURI(),
+            exception.getMessage(),
+            HttpStatus.BAD_REQUEST.value(),
+            LocalDateTime.now()
+        );
+
+        return new ResponseEntity<ApiErrorDTO>(apiErrorDTO, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiErrorDTO> handleAccessDeniedException(AccessDeniedException exception, HttpServletRequest request) {
+        ApiErrorDTO apiErrorDTO = new ApiErrorDTO(
+            request.getRequestURI(),
+            exception.getMessage(),
+            HttpStatus.FORBIDDEN.value(),
+            LocalDateTime.now()
+        );
+
+        return new ResponseEntity<ApiErrorDTO>(apiErrorDTO, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
