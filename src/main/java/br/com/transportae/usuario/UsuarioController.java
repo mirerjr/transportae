@@ -20,40 +20,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController()
 @RequestMapping("/api/v1/usuarios")
 @EnableMethodSecurity(securedEnabled = true)
+@RequiredArgsConstructor
 public class UsuarioController {
 
-    @Autowired
-    private IUsuarioRepository usuarioRepository;
+    
+    private final IUsuarioRepository usuarioRepository;    
+    private final UsuarioService usuarioService;
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> cadastrar(@Valid @RequestBody UsuarioDto usuarioDto) {
-        Optional<UsuarioModel> usuarioEncontrado = usuarioRepository.findByCpf(usuarioDto.getCpf());
-
-        if (usuarioEncontrado.isPresent()) {
-            return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(Collections.singletonMap("error", "Usuário já existente"));
-        }
-
-        UsuarioModel novoUsuario = UsuarioModel.builder()
-            .matricula(usuarioDto.getMatricula())
-            .dataNascimento(usuarioDto.getDataNascimento())
-            .nome(usuarioDto.getNome())
-            .email(usuarioDto.getEmail())
-            .cpf(usuarioDto.getCpf())
-            .perfil(usuarioDto.getPerfil())
-            .build();
-
-        UsuarioModel usuarioCadastrado = usuarioRepository.save(novoUsuario);
-        
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(usuarioCadastrado);
+            .body(usuarioService.cadastrarUsuario(usuarioDto));
     }
 
     @GetMapping

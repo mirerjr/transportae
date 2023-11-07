@@ -13,6 +13,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import br.com.transportae.usuario.exceptions.UsuarioExistenteException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.persistence.EntityNotFoundException;
@@ -132,5 +133,17 @@ public class DefaultExceptionHandler {
         );
 
         return new ResponseEntity<ApiErrorDto>(apiErrorDto, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UsuarioExistenteException.class)
+    public ResponseEntity<ApiErrorDto> handleUsuarioExistenteException(UsuarioExistenteException exception, HttpServletRequest request) {
+        ApiErrorDto apiErrorDto = new ApiErrorDto(
+            request.getRequestURI(),
+            exception.getMessage(),
+            HttpStatus.CONFLICT.value(),
+            LocalDateTime.now()
+        );
+
+        return new ResponseEntity<ApiErrorDto>(apiErrorDto, HttpStatus.CONFLICT);
     }
 }
