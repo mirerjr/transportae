@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CampoInvalidoDTO {
+public class CampoInvalidoDto {
 
     private String campo;
     private String mensagem;

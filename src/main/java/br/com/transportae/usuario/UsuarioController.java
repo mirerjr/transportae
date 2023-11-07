@@ -31,8 +31,8 @@ public class UsuarioController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Object> cadastrar(@Valid @RequestBody UsuarioDTO usuarioDTO) {
-        Optional<UsuarioModel> usuarioEncontrado = usuarioRepository.findByCpf(usuarioDTO.getCpf());
+    public ResponseEntity<Object> cadastrar(@Valid @RequestBody UsuarioDto usuarioDto) {
+        Optional<UsuarioModel> usuarioEncontrado = usuarioRepository.findByCpf(usuarioDto.getCpf());
 
         if (usuarioEncontrado.isPresent()) {
             return ResponseEntity
@@ -41,12 +41,12 @@ public class UsuarioController {
         }
 
         UsuarioModel novoUsuario = UsuarioModel.builder()
-            .matricula(usuarioDTO.getMatricula())
-            .dataNascimento(usuarioDTO.getDataNascimento())
-            .nome(usuarioDTO.getNome())
-            .email(usuarioDTO.getEmail())
-            .cpf(usuarioDTO.getCpf())
-            .perfil(usuarioDTO.getPerfil())
+            .matricula(usuarioDto.getMatricula())
+            .dataNascimento(usuarioDto.getDataNascimento())
+            .nome(usuarioDto.getNome())
+            .email(usuarioDto.getEmail())
+            .cpf(usuarioDto.getCpf())
+            .perfil(usuarioDto.getPerfil())
             .build();
 
         UsuarioModel usuarioCadastrado = usuarioRepository.save(novoUsuario);

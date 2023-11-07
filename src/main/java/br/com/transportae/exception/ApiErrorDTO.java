@@ -12,16 +12,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApiErrorDTO {
+public class ApiErrorDto {
 
     String rota;
     String mensagem;
     int codigoStatus;
     LocalDateTime dataOcorrencia;
 
-    List<CampoInvalidoDTO> camposInvalidos;
+    List<CampoInvalidoDto> camposInvalidos;
 
-    public ApiErrorDTO(String rota, String mensagem, int codigoStatus, LocalDateTime dataOcorrencia) {
+    public ApiErrorDto(String rota, String mensagem, int codigoStatus, LocalDateTime dataOcorrencia) {
         this.rota = rota;
         this.mensagem = mensagem;
         this.codigoStatus = codigoStatus;

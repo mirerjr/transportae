@@ -22,32 +22,32 @@ import jakarta.servlet.http.HttpServletRequest;
 public class DefaultExceptionHandler {
 
     @ExceptionHandler({Exception.class, RuntimeException.class})
-    public ResponseEntity<ApiErrorDTO> handleException(Exception exception, HttpServletRequest request) {
-        ApiErrorDTO apiErrorDTO = new ApiErrorDTO(
+    public ResponseEntity<ApiErrorDto> handleException(Exception exception, HttpServletRequest request) {
+        ApiErrorDto apiErrorDto = new ApiErrorDto(
             request.getRequestURI(),
             exception.getMessage(),
             HttpStatus.INTERNAL_SERVER_ERROR.value(),
             LocalDateTime.now()
         );
 
-        return new ResponseEntity<ApiErrorDTO>(apiErrorDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<ApiErrorDto>(apiErrorDto, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiErrorDTO> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception, HttpServletRequest request) {
+    public ResponseEntity<ApiErrorDto> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception, HttpServletRequest request) {
         String mensagem = "Um ou mais campos são inválidos";
 
-        List<CampoInvalidoDTO> erros = exception.getBindingResult()
+        List<CampoInvalidoDto> erros = exception.getBindingResult()
             .getFieldErrors()
             .stream()
-            .map(fieldError -> new CampoInvalidoDTO(
+            .map(fieldError -> new CampoInvalidoDto(
                     fieldError.getField(), 
                     fieldError.getDefaultMessage()
                 )
             )
             .collect(Collectors.toList());
         
-        ApiErrorDTO apiErrorDTO = new ApiErrorDTO(
+        ApiErrorDto apiErrorDto = new ApiErrorDto(
             request.getRequestURI(),
             mensagem,
             HttpStatus.BAD_REQUEST.value(),
@@ -55,82 +55,82 @@ public class DefaultExceptionHandler {
             erros
         );
 
-        return new ResponseEntity<ApiErrorDTO>(apiErrorDTO, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<ApiErrorDto>(apiErrorDto, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<ApiErrorDTO> handleUsernameNotFoundException(UsernameNotFoundException exception, HttpServletRequest request) {
-        ApiErrorDTO apiErrorDTO = new ApiErrorDTO(
+    public ResponseEntity<ApiErrorDto> handleUsernameNotFoundException(UsernameNotFoundException exception, HttpServletRequest request) {
+        ApiErrorDto apiErrorDto = new ApiErrorDto(
             request.getRequestURI(),
             exception.getMessage(),
             HttpStatus.NOT_FOUND.value(),
             LocalDateTime.now()
         );
 
-        return new ResponseEntity<ApiErrorDTO>(apiErrorDTO, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<ApiErrorDto>(apiErrorDto, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(SignatureException.class)
-    public ResponseEntity<ApiErrorDTO> handleSignatureException(SignatureException exception, HttpServletRequest request) {
+    public ResponseEntity<ApiErrorDto> handleSignatureException(SignatureException exception, HttpServletRequest request) {
         String mensagem = "Chave de acesso inválida! Por favor, efetue o login novamente";
 
-        ApiErrorDTO apiErrorDTO = new ApiErrorDTO(
+        ApiErrorDto apiErrorDto = new ApiErrorDto(
             request.getRequestURI(),
             mensagem,
             HttpStatus.FORBIDDEN.value(),
             LocalDateTime.now()
         );
 
-        return new ResponseEntity<ApiErrorDTO>(apiErrorDTO, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<ApiErrorDto>(apiErrorDto, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<ApiErrorDTO> handleExpiredJwtException(ExpiredJwtException exception, HttpServletRequest request) {
+    public ResponseEntity<ApiErrorDto> handleExpiredJwtException(ExpiredJwtException exception, HttpServletRequest request) {
         String mensagem = "Tempo de acesso expirado! Por favor, efetue o login novamente";
 
-        ApiErrorDTO apiErrorDTO = new ApiErrorDTO(
+        ApiErrorDto apiErrorDto = new ApiErrorDto(
             request.getRequestURI(),
             mensagem,
             HttpStatus.FORBIDDEN.value(),
             LocalDateTime.now()
         );
 
-        return new ResponseEntity<ApiErrorDTO>(apiErrorDTO, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<ApiErrorDto>(apiErrorDto, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ApiErrorDTO> handleBadCredentialsException(BadCredentialsException exception, HttpServletRequest request) {
-        ApiErrorDTO apiErrorDTO = new ApiErrorDTO(
+    public ResponseEntity<ApiErrorDto> handleBadCredentialsException(BadCredentialsException exception, HttpServletRequest request) {
+        ApiErrorDto apiErrorDto = new ApiErrorDto(
             request.getRequestURI(),
             exception.getMessage(),
             HttpStatus.BAD_REQUEST.value(),
             LocalDateTime.now()
         );
 
-        return new ResponseEntity<ApiErrorDTO>(apiErrorDTO, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<ApiErrorDto>(apiErrorDto, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ApiErrorDTO> handleAccessDeniedException(AccessDeniedException exception, HttpServletRequest request) {
-        ApiErrorDTO apiErrorDTO = new ApiErrorDTO(
+    public ResponseEntity<ApiErrorDto> handleAccessDeniedException(AccessDeniedException exception, HttpServletRequest request) {
+        ApiErrorDto apiErrorDto = new ApiErrorDto(
             request.getRequestURI(),
             exception.getMessage(),
             HttpStatus.FORBIDDEN.value(),
             LocalDateTime.now()
         );
 
-        return new ResponseEntity<ApiErrorDTO>(apiErrorDTO, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<ApiErrorDto>(apiErrorDto, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ApiErrorDTO> handleEntityNotFoundException(EntityNotFoundException exception, HttpServletRequest request) {
-        ApiErrorDTO apiErrorDTO = new ApiErrorDTO(
+    public ResponseEntity<ApiErrorDto> handleEntityNotFoundException(EntityNotFoundException exception, HttpServletRequest request) {
+        ApiErrorDto apiErrorDto = new ApiErrorDto(
             request.getRequestURI(),
             exception.getMessage(),
             HttpStatus.NOT_FOUND.value(),
             LocalDateTime.now()
         );
 
-        return new ResponseEntity<ApiErrorDTO>(apiErrorDTO, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<ApiErrorDto>(apiErrorDto, HttpStatus.NOT_FOUND);
     }
 }
