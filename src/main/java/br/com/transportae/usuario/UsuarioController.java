@@ -1,6 +1,7 @@
 package br.com.transportae.usuario;
 
 import java.math.BigInteger;
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -71,5 +73,14 @@ public class UsuarioController {
         UsuarioModel usuarioAtualizado = usuarioRepository.save(usuarioModel);
         
         return ResponseEntity.ok().body(usuarioAtualizado);
+    }
+
+    @PatchMapping("/senha")
+    public ResponseEntity<Object> alterarSenha(
+        @Valid @RequestBody AlterarSenhaRequest request,
+        Principal principal
+    ) {
+        usuarioService.alterarSenha(request, principal);
+        return ResponseEntity.ok().build();
     }
 }

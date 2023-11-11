@@ -146,4 +146,16 @@ public class DefaultExceptionHandler {
 
         return new ResponseEntity<ApiErrorDto>(apiErrorDto, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ApiErrorDto> handleIllegalStateException(IllegalStateException exception, HttpServletRequest request) {
+        ApiErrorDto apiErrorDto = new ApiErrorDto(
+            request.getRequestURI(),
+            exception.getMessage(),
+            HttpStatus.CONFLICT.value(),
+            LocalDateTime.now()
+        );
+
+        return new ResponseEntity<ApiErrorDto>(apiErrorDto, HttpStatus.CONFLICT);
+    }
 }
