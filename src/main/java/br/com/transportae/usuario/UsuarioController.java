@@ -1,6 +1,5 @@
 package br.com.transportae.usuario;
 
-import java.math.BigInteger;
 import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
@@ -49,7 +48,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> exibir(@PathVariable BigInteger id) throws EntityNotFoundException {
+    public ResponseEntity<Object> exibir(@PathVariable Long id) throws EntityNotFoundException {
         UsuarioModel usuario = usuarioRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
@@ -59,7 +58,7 @@ public class UsuarioController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Object> atualizar(@PathVariable BigInteger id, @RequestBody UsuarioModel usuarioModel) {
+    public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody UsuarioModel usuarioModel) {
         Optional<UsuarioModel> usuarioExistente = usuarioRepository.findById(id);
 
         if (usuarioExistente.isEmpty()) {

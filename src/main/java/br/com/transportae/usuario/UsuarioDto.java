@@ -1,6 +1,5 @@
 package br.com.transportae.usuario;
 
-import java.math.BigInteger;
 import java.time.LocalDate;
 
 import org.hibernate.validator.constraints.Length;
@@ -22,7 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UsuarioDto {
 
-    private BigInteger id;
+    private Long id;
     private String matricula;
 
     @Past(message = "A data de nascimento deve estar no passado")

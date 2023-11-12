@@ -1,6 +1,5 @@
 package br.com.transportae.usuario;
 
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -34,8 +33,7 @@ public class UsuarioModel implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(columnDefinition = "BIGINT")
-    private BigInteger id;
+    private Long id;
 
     @Builder.Default
     private Boolean ativo = true;
