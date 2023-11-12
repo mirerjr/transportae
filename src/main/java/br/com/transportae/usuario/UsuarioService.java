@@ -1,6 +1,7 @@
 package br.com.transportae.usuario;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,4 +69,22 @@ public class UsuarioService {
 
         return usuarioLogado;
     }
+
+	public boolean hasUsuarioAdmin() {
+        Optional<UsuarioModel> admin = usuarioRepository.findByPerfil(Perfil.ADMIN);
+		return admin.isPresent();
+	}
+
+	public void cadastrarUsuarioAdmin() {
+        UsuarioModel admin = UsuarioModel.builder()
+            .perfil(Perfil.ADMIN)
+            .nome("Mirer Balbino de Andrade Junior")
+            .email("mirer.rmj@gmail.com")
+            .matricula("01")
+            .cpf("00000000000")
+            .senha("$2a$12$FJve86hShTAnCXXjHjVHNOB7nA7B/0DEc.jeUGzP3TcQYqPehFl.a")
+            .build();
+        
+        usuarioRepository.save(admin);
+	}
 }

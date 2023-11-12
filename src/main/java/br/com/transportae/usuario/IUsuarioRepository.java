@@ -11,6 +11,7 @@ public interface IUsuarioRepository extends JpaRepository<UsuarioModel, Long> {
     Optional<UsuarioModel> findById(Long id);
     Optional<UsuarioModel> findByCpf(String cpf);
     Optional<UsuarioModel> findByEmail(String email);
+    Optional<UsuarioModel> findByPerfil(Perfil perfil);
 
     @Query("SELECT u FROM usuario u WHERE u.email = :email OR u.cpf = :cpf")
     Optional<UsuarioModel> findByEmailOrCpf(String email, String cpf);
