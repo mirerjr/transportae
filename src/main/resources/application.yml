@@ -16,3 +16,9 @@ spring:
             hibernate:
                 formatsql: true
         database-platform: org.hibernate.dialect.PostgreSQLDialect
+    flyway: 
+        enabled: true
+        baseline-on-migrate: true
+        baseline-description: "init"
+        baseline-version: 0
+        validate-on-migrate: true
