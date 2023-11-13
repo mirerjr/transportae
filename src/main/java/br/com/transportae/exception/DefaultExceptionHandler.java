@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -157,5 +158,19 @@ public class DefaultExceptionHandler {
         );
 
         return new ResponseEntity<ApiErrorDto>(apiErrorDto, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(MailException.class)
+    public ResponseEntity<ApiErrorDto> handleMailException(MailException exception, HttpServletRequest request) {
+        String mensagem = "Ocorreu um erro ao enviar o email. Por favor, tente novamente";
+
+        ApiErrorDto apiErrorDto = new ApiErrorDto(
+            request.getRequestURI(),
+            mensagem,
+            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            LocalDateTime.now()
+        );
+
+        return new ResponseEntity<ApiErrorDto>(apiErrorDto, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

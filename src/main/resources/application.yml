@@ -16,3 +16,14 @@ spring:
             hibernate:
                 formatsql: true
         database-platform: org.hibernate.dialect.PostgreSQLDialect
+    mail:
+        host: smtp.gmail.com
+        port: 587
+        username: mirer.rmj@gmail.com
+        password: senhaSMTP
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
