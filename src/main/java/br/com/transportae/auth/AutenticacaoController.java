@@ -1,5 +1,8 @@
 package br.com.transportae.auth;
 
+import java.net.URI;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +25,17 @@ public class AutenticacaoController {
 
     @PostMapping("/login")
     public ResponseEntity<AutenticacaoResponse> logar(@RequestBody LoginRequest request) {
-        return ResponseEntity.ok(authenticationService.logar(request));
+        AutenticacaoResponse autenticacaoResponse = authenticationService.logar(request);
+
+        if (autenticacaoResponse.isPrimeiroAcesso()) {
+            URI uriAlteracaoSenha = URI.create("/api/v1/usuario/senha");
+
+            return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .location(uriAlteracaoSenha)
+                .body(autenticacaoResponse);
+        }
+                   
+        return ResponseEntity.ok(autenticacaoResponse);
     }    
 }

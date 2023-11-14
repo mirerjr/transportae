@@ -80,6 +80,14 @@ public class UsuarioService {
             throw new IllegalStateException("As senhas não conferem");
         }
 
+        if (Objects.isNull(usuarioLogado.getDataPrimeiroAcesso())) {
+            usuarioLogado.setDataPrimeiroAcesso(LocalDateTime.now());
+        }
+
+        if (!usuarioLogado.isEmailVerificado()) {
+            usuarioLogado.setEmailVerificado(true);
+        }
+
         usuarioLogado.setSenha(passwordEncoder.encode(request.getNovaSenha()));
         usuarioRepository.save(usuarioLogado);
     }

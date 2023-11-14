@@ -11,6 +11,7 @@ import br.com.transportae.config.JwtService;
 import br.com.transportae.usuario.IUsuarioRepository;
 import br.com.transportae.usuario.Perfil;
 import br.com.transportae.usuario.UsuarioModel;
+import br.com.transportae.usuario.exceptions.UsuarioExistenteException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -54,9 +55,18 @@ public class AutenticacaoService {
             )
         );
 
-        UsuarioModel usuarioEncontrado = usuarioRepository.findByEmail(request.getEmail()).orElseThrow();
+        UsuarioModel usuarioEncontrado = usuarioRepository
+            .findByEmail(request.getEmail())
+            .orElseThrow(() -> new UsuarioExistenteException("Usuário não encontrado"));
 
         String jwtToken = jwtService.gerarToken(usuarioEncontrado);
+
+        if (!usuarioEncontrado.isEmailVerificado()) {
+            return AutenticacaoResponse.builder()
+                .isPrimeiroAcesso(true)
+                .token(jwtToken)
+                .build();
+        }
 
         return AutenticacaoResponse.builder()
             .token(jwtToken)

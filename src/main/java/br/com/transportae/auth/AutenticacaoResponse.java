@@ -12,4 +12,7 @@ import lombok.NoArgsConstructor;
 public class AutenticacaoResponse {
 
     private String token;
+
+    @Builder.Default
+    private boolean isPrimeiroAcesso = false;
 }
