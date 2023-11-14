@@ -26,7 +26,9 @@ public class UsuarioService {
             throw new UsuarioExistenteException("Usuário já existente");
         }
 
-        UsuarioModel novoUsuario = converterDtoParaDomain(usuarioDto);        
+        UsuarioModel novoUsuario = converterDtoParaDomain(usuarioDto); 
+        novoUsuario.setSenha("*****");
+
         return usuarioRepository.save(novoUsuario);
     }
 
@@ -63,13 +65,6 @@ public class UsuarioService {
         usuarioRepository.save(usuarioLogado);
     }
     
-    private UsuarioModel getUsuarioLogado (Principal principal) {
-        var usuarioPrincipal = ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        UsuarioModel usuarioLogado = (UsuarioModel) usuarioPrincipal;
-
-        return usuarioLogado;
-    }
-
 	public boolean hasUsuarioAdmin() {
         Optional<UsuarioModel> admin = usuarioRepository.findByPerfil(Perfil.ADMIN);
 		return admin.isPresent();
@@ -87,4 +82,11 @@ public class UsuarioService {
         
         usuarioRepository.save(admin);
 	}
+
+    private UsuarioModel getUsuarioLogado (Principal principal) {
+        var usuarioPrincipal = ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        UsuarioModel usuarioLogado = (UsuarioModel) usuarioPrincipal;
+
+        return usuarioLogado;
+    }
 }
