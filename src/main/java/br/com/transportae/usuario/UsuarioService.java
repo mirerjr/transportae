@@ -1,15 +1,19 @@
 package br.com.transportae.usuario;
 
 import java.security.Principal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import br.com.transportae.email.EmailService;
 import br.com.transportae.usuario.exceptions.UsuarioExistenteException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -17,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class UsuarioService {
 
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     @Autowired
     private IUsuarioRepository usuarioRepository;
@@ -30,6 +35,20 @@ public class UsuarioService {
         novoUsuario.setSenha("*****");
 
         return usuarioRepository.save(novoUsuario);
+    }
+
+    public void liberarAcessoUsuario(Long id) {
+        String senha = gerarSenhaPrimeiroAcesso();
+
+        UsuarioModel usuario = usuarioRepository
+            .findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+            
+        usuario.setSenha(passwordEncoder.encode(senha));
+        
+        UsuarioModel usuarioAtualizado = usuarioRepository.save(usuario);
+
+        emailService.enviarEmailPrimeiroAcesso(usuarioAtualizado, senha);        
     }
 
     public UsuarioModel converterDtoParaDomain (UsuarioDto usuarioDto) {
@@ -82,6 +101,14 @@ public class UsuarioService {
         
         usuarioRepository.save(admin);
 	}
+    
+    public String gerarSenhaPrimeiroAcesso() {
+        int tamanhoSenha = 10;
+        boolean hasLetras = true;
+        boolean hasDigitos = true;
+
+        return RandomStringUtils.random(tamanhoSenha, hasLetras, hasDigitos);        
+    }  
 
     private UsuarioModel getUsuarioLogado (Principal principal) {
         var usuarioPrincipal = ((UsernamePasswordAuthenticationToken) principal).getPrincipal();

@@ -74,6 +74,13 @@ public class UsuarioController {
         return ResponseEntity.ok().body(usuarioAtualizado);
     }
 
+    @PatchMapping("/acesso/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Object> liberarAcesso(@PathVariable Long id) {
+        usuarioService.liberarAcessoUsuario(id);
+        return ResponseEntity.ok().build();
+    }
+
     @PatchMapping("/senha")
     public ResponseEntity<Object> alterarSenha(
         @Valid @RequestBody AlterarSenhaRequest request,

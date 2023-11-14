@@ -19,7 +19,6 @@ public class EmailService {
     @Autowired
     private JavaMailSender emailSender;
     
-    private final AutenticacaoService autenticacaoService;
 
     public void enviarEmail (EmailModel emailModel, Boolean limparConteudo) {
         SimpleMailMessage mensagem = formatarMensagemEmail(emailModel);
@@ -42,4 +41,30 @@ public class EmailService {
         return mensagem;     
     }
 
+    
+    public void enviarEmailPrimeiroAcesso(UsuarioModel usuarioModel, String senha) {
+        String mensagem = formatarMensagemPrimeiroAcesso(usuarioModel, senha);
+
+        EmailModel email = EmailModel.builder()
+            .remetente("mirer.rmj@gmail.com")
+            .destinatario(usuarioModel.getEmail())
+            .assunto("Transportaê - Instruções para acesso ao sistema")
+            .conteudo(mensagem)
+            .build();
+
+        enviarEmail(email, true);
+    }
+
+    private String formatarMensagemPrimeiroAcesso(UsuarioModel usuarioModel, String senha) {
+        return new StringBuilder()
+            .append("Prezado ").append(usuarioModel.getNome())
+            .append(",\nPara realizar o primeiro acesso, por favor siga os passos abaixo:")
+            .append("\n\nLink: ").append("http://localhost:4000")
+            .append("\nLogin: ").append(usuarioModel.getEmail())
+            .append("\nSenha: ").append(senha)
+            .append("\n\nApós o login, será preciso a alteração da senha")
+            .append("\n\nAtenciosamente, ")
+            .append("\nEquipe Transportaê.")
+            .toString();
+    }
 }

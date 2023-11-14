@@ -36,7 +36,10 @@ public class UsuarioModel implements UserDetails {
     private Long id;
 
     @Builder.Default
-    private Boolean ativo = true;
+    private boolean ativo = true;
+
+    @Builder.Default
+    private boolean emailVerificado = false;
     
     @Column(length = 255, nullable = false)
     private String nome;
@@ -54,15 +57,11 @@ public class UsuarioModel implements UserDetails {
     private String senha;
 
     private LocalDate dataNascimento;
+
+    private LocalDateTime dataPrimeiroAcesso;
     
     @CreationTimestamp
     private LocalDateTime dataCadasto;
-
-    // @OneToMany(mappedBy = "usuario")
-    // private List<UsuarioLogModel> alteracoesRecebidas;
-
-    // @OneToMany(mappedBy = "usuarioResponsavel")
-    // private List<UsuarioLogModel> alteracoesRealizadas;
 
     @Enumerated(EnumType.STRING)
     private Perfil perfil;    
