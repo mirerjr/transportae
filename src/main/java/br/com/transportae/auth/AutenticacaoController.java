@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -24,7 +25,7 @@ public class AutenticacaoController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AutenticacaoResponse> logar(@RequestBody LoginRequest request) {
+    public ResponseEntity<AutenticacaoResponse> logar(@Valid @RequestBody LoginRequest request) {
         AutenticacaoResponse autenticacaoResponse = authenticationService.logar(request);
 
         if (autenticacaoResponse.isPrimeiroAcesso()) {
