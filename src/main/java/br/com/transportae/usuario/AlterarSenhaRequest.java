@@ -12,9 +12,9 @@ public class AlterarSenhaRequest {
     private String senhaAtual;
 
     @NotBlank(message = "Por favor, informe a nova senha")
-    private String novaSenha;
+    private String senhaNova;
 
     @NotBlank(message = "Por favor, confirme a nova senha")
-    private String novaSenhaConfirmada;
+    private String senhaNovaConfirmada;
 
 }

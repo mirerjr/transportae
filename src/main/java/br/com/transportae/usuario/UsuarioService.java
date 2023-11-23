@@ -70,7 +70,7 @@ public class UsuarioService {
         UsuarioModel usuarioLogado = getUsuarioLogado(principal);
 
         Boolean isSenhaAtualCorreta = passwordEncoder.matches(request.getSenhaAtual(), usuarioLogado.getSenha());
-        Boolean isSenhaNovaConfirmada = request.getNovaSenha().equals(request.getNovaSenhaConfirmada());
+        Boolean isSenhaNovaConfirmada = request.getSenhaNova().equals(request.getSenhaNovaConfirmada());
 
         if (!isSenhaAtualCorreta) {
             throw new IllegalStateException("Senha atual incorreta");
@@ -88,7 +88,7 @@ public class UsuarioService {
             usuarioLogado.setEmailVerificado(true);
         }
 
-        usuarioLogado.setSenha(passwordEncoder.encode(request.getNovaSenha()));
+        usuarioLogado.setSenha(passwordEncoder.encode(request.getSenhaNova()));
         usuarioRepository.save(usuarioLogado);
     }
     
