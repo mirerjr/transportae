@@ -102,9 +102,11 @@ public class DefaultExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiErrorDto> handleBadCredentialsException(BadCredentialsException exception, HttpServletRequest request) {
+        String mensagem = "Usuário e/ou senha incorretos";
+
         ApiErrorDto apiErrorDto = new ApiErrorDto(
             request.getRequestURI(),
-            exception.getMessage(),
+            mensagem,
             HttpStatus.BAD_REQUEST.value(),
             LocalDateTime.now()
         );
