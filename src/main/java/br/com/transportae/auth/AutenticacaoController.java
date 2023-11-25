@@ -19,11 +19,6 @@ public class AutenticacaoController {
     
     private final AutenticacaoService authenticationService;
 
-    @PostMapping("/cadastro")
-    public ResponseEntity<AutenticacaoResponse> cadastrar(@RequestBody CadastroRequest request) {
-        return ResponseEntity.ok(authenticationService.cadastrar(request));
-    }
-
     @PostMapping("/login")
     public ResponseEntity<AutenticacaoResponse> logar(@Valid @RequestBody LoginRequest request) {
         AutenticacaoResponse autenticacaoResponse = authenticationService.logar(request);

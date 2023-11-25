@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import br.com.transportae.config.JwtService;
 import br.com.transportae.usuario.IUsuarioRepository;
-import br.com.transportae.usuario.Perfil;
 import br.com.transportae.usuario.UsuarioModel;
 import br.com.transportae.usuario.exceptions.UsuarioExistenteException;
 import lombok.RequiredArgsConstructor;
@@ -23,30 +22,6 @@ public class AutenticacaoService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     
-    public AutenticacaoResponse cadastrar(CadastroRequest request) {
-        Perfil perfilSelecionado = Objects.nonNull(request.getPerfil()) 
-            ? request.getPerfil()
-            : Perfil.ALUNO;
-
-        UsuarioModel novoUsuario = UsuarioModel.builder()
-            .nome(request.getNome())
-            .email(request.getEmail())
-            .cpf(request.getCpf())
-            .matricula(request.getMatricula())
-            .dataNascimento(request.getDataNascimento())
-            .perfil(perfilSelecionado)
-            .senha(passwordEncoder.encode(request.getSenha()))
-            .build();
-
-        usuarioRepository.save(novoUsuario);
-
-        String jwtToken = jwtService.gerarToken(novoUsuario);
-
-        return AutenticacaoResponse.builder()
-            .token(jwtToken)
-            .build();
-    }
-
     public AutenticacaoResponse logar(LoginRequest request) {
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
