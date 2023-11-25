@@ -1,5 +1,7 @@
 package br.com.transportae.auth;
 
+import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -47,5 +49,37 @@ public class AutenticacaoService {
             .token(jwtToken)
             .build();
     }
-    
+
+    public void alterarSenha(AlterarSenhaRequest request, Principal principal) {
+        UsuarioModel usuarioLogado = getUsuarioLogado(principal);
+
+        Boolean isSenhaAtualCorreta = passwordEncoder.matches(request.getSenhaAtual(), usuarioLogado.getSenha());
+        Boolean isSenhaNovaConfirmada = request.getSenhaNova().equals(request.getSenhaNovaConfirmada());
+
+        if (!isSenhaAtualCorreta) {
+            throw new IllegalStateException("Senha atual incorreta");
+        }
+        
+        if (!isSenhaNovaConfirmada) {
+            throw new IllegalStateException("As senhas não conferem");
+        }
+
+        if (Objects.isNull(usuarioLogado.getDataPrimeiroAcesso())) {
+            usuarioLogado.setDataPrimeiroAcesso(LocalDateTime.now());
+        }
+
+        if (!usuarioLogado.isEmailVerificado()) {
+            usuarioLogado.setEmailVerificado(true);
+        }
+
+        usuarioLogado.setSenha(passwordEncoder.encode(request.getSenhaNova()));
+        usuarioRepository.save(usuarioLogado);
+    }
+
+    public UsuarioModel getUsuarioLogado (Principal principal) {
+        var usuarioPrincipal = ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        UsuarioModel usuarioLogado = (UsuarioModel) usuarioPrincipal;
+
+        return usuarioLogado;
+    }    
 }

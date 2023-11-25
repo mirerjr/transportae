@@ -1,4 +1,4 @@
-package br.com.transportae.usuario;
+package br.com.transportae.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;

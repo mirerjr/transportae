@@ -1,9 +1,11 @@
 package br.com.transportae.auth;
 
 import java.net.URI;
+import java.security.Principal;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,5 +35,14 @@ public class AutenticacaoController {
         }
                    
         return ResponseEntity.ok(autenticacaoResponse);
-    }    
+    }
+
+    @PatchMapping("/senha")
+    public ResponseEntity<Object> alterarSenha(
+        @Valid @RequestBody AlterarSenhaRequest request,
+        Principal principal
+    ) {
+        authenticationService.alterarSenha(request, principal);
+        return ResponseEntity.ok().build();
+    }
 }

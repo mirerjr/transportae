@@ -1,13 +1,9 @@
 package br.com.transportae.usuario;
 
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -65,32 +61,6 @@ public class UsuarioService {
     public Boolean isUsuarioCadastrado(String email, String cpf) {
         return usuarioRepository.findByEmailOrCpf(email, cpf).isPresent();
     }
-
-    public void alterarSenha(AlterarSenhaRequest request, Principal principal) {
-        UsuarioModel usuarioLogado = getUsuarioLogado(principal);
-
-        Boolean isSenhaAtualCorreta = passwordEncoder.matches(request.getSenhaAtual(), usuarioLogado.getSenha());
-        Boolean isSenhaNovaConfirmada = request.getSenhaNova().equals(request.getSenhaNovaConfirmada());
-
-        if (!isSenhaAtualCorreta) {
-            throw new IllegalStateException("Senha atual incorreta");
-        }
-        
-        if (!isSenhaNovaConfirmada) {
-            throw new IllegalStateException("As senhas não conferem");
-        }
-
-        if (Objects.isNull(usuarioLogado.getDataPrimeiroAcesso())) {
-            usuarioLogado.setDataPrimeiroAcesso(LocalDateTime.now());
-        }
-
-        if (!usuarioLogado.isEmailVerificado()) {
-            usuarioLogado.setEmailVerificado(true);
-        }
-
-        usuarioLogado.setSenha(passwordEncoder.encode(request.getSenhaNova()));
-        usuarioRepository.save(usuarioLogado);
-    }
     
 	public boolean hasUsuarioAdmin() {
         Optional<UsuarioModel> admin = usuarioRepository.findByPerfil(Perfil.ADMIN);
@@ -116,12 +86,5 @@ public class UsuarioService {
         boolean hasDigitos = true;
 
         return RandomStringUtils.random(tamanhoSenha, hasLetras, hasDigitos);        
-    }  
-
-    private UsuarioModel getUsuarioLogado (Principal principal) {
-        var usuarioPrincipal = ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        UsuarioModel usuarioLogado = (UsuarioModel) usuarioPrincipal;
-
-        return usuarioLogado;
     }
 }
