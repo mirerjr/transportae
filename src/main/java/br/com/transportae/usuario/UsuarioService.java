@@ -1,5 +1,6 @@
 package br.com.transportae.usuario;
 
+import java.security.Principal;
 import java.util.Optional;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import br.com.transportae.auth.AutenticacaoService;
 import br.com.transportae.email.EmailService;
 import br.com.transportae.usuario.exceptions.UsuarioExistenteException;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,6 +20,7 @@ public class UsuarioService {
 
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final AutenticacaoService autenticacaoService;
 
     @Autowired
     private IUsuarioRepository usuarioRepository;
@@ -47,7 +50,7 @@ public class UsuarioService {
         emailService.enviarEmailPrimeiroAcesso(usuarioAtualizado, senha);        
     }
 
-    public UsuarioModel converterDtoParaDomain (UsuarioDto usuarioDto) {
+    public UsuarioModel converterDtoParaDomain(UsuarioDto usuarioDto) {
         return UsuarioModel.builder()
             .matricula(usuarioDto.getMatricula())
             .dataNascimento(usuarioDto.getDataNascimento())
@@ -56,6 +59,22 @@ public class UsuarioService {
             .cpf(usuarioDto.getCpf())
             .perfil(usuarioDto.getPerfil())
             .build();
+    }
+
+    public UsuarioDto converterDomainParaDto(UsuarioModel usuario) {
+        return UsuarioDto.builder()
+            .matricula(usuario.getMatricula())
+            .dataNascimento(usuario.getDataNascimento())
+            .nome(usuario.getNome())
+            .email(usuario.getEmail())
+            .cpf(usuario.getCpf())
+            .perfil(usuario.getPerfil())
+            .build();
+    }
+
+    public UsuarioDto getUsuarioLogado(Principal principal) {
+        UsuarioModel usuarioModel = autenticacaoService.getUsuarioLogado(principal);
+        return converterDomainParaDto(usuarioModel);
     }
 
     public Boolean isUsuarioCadastrado(String email, String cpf) {

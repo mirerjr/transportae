@@ -56,6 +56,12 @@ public class UsuarioController {
         return ResponseEntity.ok().body(usuario);
     }
 
+    @GetMapping("/logado")
+    public ResponseEntity<UsuarioDto> getUsuarioLogado(Principal principal) {
+        UsuarioDto usuarioLogado = usuarioService.getUsuarioLogado(principal);
+        return ResponseEntity.ok().body(usuarioLogado);
+    }
+
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody UsuarioModel usuarioModel) {
