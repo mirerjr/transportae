@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -42,9 +43,14 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> listar() {
-        List<UsuarioModel> usuarios = usuarioRepository.findAll();
-        return ResponseEntity.ok().body(usuarios);
+    public ResponseEntity<Object> listar(
+        @RequestParam(name = "pagina") int pagina, 
+        @RequestParam(name = "quantidade") int quantidade,
+        @RequestParam(name = "campo") String campo
+    ){        
+        return ResponseEntity
+            .ok()
+            .body(usuarioService.listar(pagina, quantidade, campo));
     }
 
     @GetMapping("/{id}")

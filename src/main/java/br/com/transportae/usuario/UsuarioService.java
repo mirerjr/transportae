@@ -5,6 +5,10 @@ import java.util.Optional;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +38,12 @@ public class UsuarioService {
         novoUsuario.setSenha("*****");
 
         return usuarioRepository.save(novoUsuario);
+    }
+
+    public Page<UsuarioModel> listar(int pagina, int quantidade, String campo) {
+        Sort ordenacao = Sort.by(campo).descending();
+        Pageable paginacao = PageRequest.of(pagina, quantidade, ordenacao);
+        return usuarioRepository.findAll(paginacao);
     }
 
     public void liberarAcessoUsuario(Long id) {

@@ -2,6 +2,8 @@ package br.com.transportae.usuario;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,4 +17,6 @@ public interface IUsuarioRepository extends JpaRepository<UsuarioModel, Long> {
 
     @Query("SELECT u FROM usuario u WHERE u.email = :email OR u.cpf = :cpf")
     Optional<UsuarioModel> findByEmailOrCpf(String email, String cpf);
+
+    Page<UsuarioModel> findAll(Pageable pagina);
 }
