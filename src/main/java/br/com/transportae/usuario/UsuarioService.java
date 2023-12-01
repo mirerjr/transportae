@@ -101,12 +101,30 @@ public class UsuarioService {
             .perfil(Perfil.ADMIN)
             .nome("Mirer Balbino de Andrade Junior")
             .email("mirer.rmj@gmail.com")
+            .telefone("(00) 00000-0000")
             .matricula("01")
             .cpf("00000000000")
             .senha("$2a$12$FJve86hShTAnCXXjHjVHNOB7nA7B/0DEc.jeUGzP3TcQYqPehFl.a")
             .build();
         
         usuarioRepository.save(admin);
+	}
+
+    public void cadastrarUsuarioMock(int quantidade) {
+        for (int pos = 1; pos <= quantidade; pos++) {
+            String cpf = pos > 9 ? "000000000" + pos : "0000000000" + pos;
+
+            UsuarioModel usuario = UsuarioModel.builder()
+                .perfil(Perfil.ALUNO)
+                .nome("Mirer " + pos)
+                .email("mirer"+ pos +"@gmail.com")
+                .telefone("(00) 00000-0000")
+                .matricula("0" + pos)
+                .cpf(cpf)
+                .senha("$2a$12$FJve86hShTAnCXXjHjVHNOB7nA7B/0DEc.jeUGzP3TcQYqPehFl.a")
+                .build();        
+            usuarioRepository.save(usuario);
+        }
 	}
     
     public String gerarSenhaPrimeiroAcesso() {

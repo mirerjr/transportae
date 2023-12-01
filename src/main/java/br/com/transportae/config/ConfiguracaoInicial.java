@@ -16,6 +16,7 @@ public class ConfiguracaoInicial {
     public void iniciar() {
         if (!usuarioService.hasUsuarioAdmin()) {
             usuarioService.cadastrarUsuarioAdmin();
+            usuarioService.cadastrarUsuarioMock(20);
         }
     }    
 }
