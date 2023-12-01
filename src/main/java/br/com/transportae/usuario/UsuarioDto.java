@@ -3,7 +3,6 @@ package br.com.transportae.usuario;
 import java.time.LocalDate;
 
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.br.CPF;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -23,6 +22,7 @@ public class UsuarioDto {
 
     private Long id;
     private String matricula;
+    private String telefone;
 
     @Past(message = "A data de nascimento deve estar no passado")
     private LocalDate dataNascimento;

@@ -46,6 +46,9 @@ public class UsuarioModel implements UserDetails {
     
     @Column(length = 150, nullable = false)
     private String email;
+
+    @Column(length = 30)
+    private String telefone;
     
     @Column(length = 11, nullable = false)
     private String cpf;
