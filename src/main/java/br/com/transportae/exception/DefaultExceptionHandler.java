@@ -27,6 +27,7 @@ public class DefaultExceptionHandler {
     public ResponseEntity<ApiErrorDto> handleException(Exception exception, HttpServletRequest request) {
         ApiErrorDto apiErrorDto = new ApiErrorDto(
             request.getRequestURI(),
+            "ERRO_DESCONHECIDO",
             exception.getMessage(),
             HttpStatus.INTERNAL_SERVER_ERROR.value(),
             LocalDateTime.now()
@@ -51,6 +52,7 @@ public class DefaultExceptionHandler {
         
         ApiErrorDto apiErrorDto = new ApiErrorDto(
             request.getRequestURI(),
+            "CAMPOS_INVALIDOS",
             mensagem,
             HttpStatus.BAD_REQUEST.value(),
             LocalDateTime.now(),
@@ -64,6 +66,7 @@ public class DefaultExceptionHandler {
     public ResponseEntity<ApiErrorDto> handleUsernameNotFoundException(UsernameNotFoundException exception, HttpServletRequest request) {
         ApiErrorDto apiErrorDto = new ApiErrorDto(
             request.getRequestURI(),
+            "USUARIO_INEXISTENTE",
             exception.getMessage(),
             HttpStatus.NOT_FOUND.value(),
             LocalDateTime.now()
@@ -78,6 +81,7 @@ public class DefaultExceptionHandler {
 
         ApiErrorDto apiErrorDto = new ApiErrorDto(
             request.getRequestURI(),
+            "TOKEN_INVALIDO",
             mensagem,
             HttpStatus.FORBIDDEN.value(),
             LocalDateTime.now()
@@ -92,6 +96,7 @@ public class DefaultExceptionHandler {
 
         ApiErrorDto apiErrorDto = new ApiErrorDto(
             request.getRequestURI(),
+            "TOKEN_EXPIRADO",
             mensagem,
             HttpStatus.FORBIDDEN.value(),
             LocalDateTime.now()
@@ -106,6 +111,7 @@ public class DefaultExceptionHandler {
 
         ApiErrorDto apiErrorDto = new ApiErrorDto(
             request.getRequestURI(),
+            "CREDENCIAIS_INCORRETAS",
             mensagem,
             HttpStatus.BAD_REQUEST.value(),
             LocalDateTime.now()
@@ -118,6 +124,7 @@ public class DefaultExceptionHandler {
     public ResponseEntity<ApiErrorDto> handleAccessDeniedException(AccessDeniedException exception, HttpServletRequest request) {
         ApiErrorDto apiErrorDto = new ApiErrorDto(
             request.getRequestURI(),
+            "ACESSO_NEGADO",
             exception.getMessage(),
             HttpStatus.FORBIDDEN.value(),
             LocalDateTime.now()
@@ -130,6 +137,7 @@ public class DefaultExceptionHandler {
     public ResponseEntity<ApiErrorDto> handleEntityNotFoundException(EntityNotFoundException exception, HttpServletRequest request) {
         ApiErrorDto apiErrorDto = new ApiErrorDto(
             request.getRequestURI(),
+            "ENTIDADE_INEXISTENTE",
             exception.getMessage(),
             HttpStatus.NOT_FOUND.value(),
             LocalDateTime.now()
@@ -142,6 +150,7 @@ public class DefaultExceptionHandler {
     public ResponseEntity<ApiErrorDto> handleUsuarioExistenteException(UsuarioExistenteException exception, HttpServletRequest request) {
         ApiErrorDto apiErrorDto = new ApiErrorDto(
             request.getRequestURI(),
+            "USUARIO_DUPLICADO",
             exception.getMessage(),
             HttpStatus.CONFLICT.value(),
             LocalDateTime.now()
@@ -154,6 +163,7 @@ public class DefaultExceptionHandler {
     public ResponseEntity<ApiErrorDto> handleIllegalStateException(IllegalStateException exception, HttpServletRequest request) {
         ApiErrorDto apiErrorDto = new ApiErrorDto(
             request.getRequestURI(),
+            "DADOS_CONFLITANTES",
             exception.getMessage(),
             HttpStatus.CONFLICT.value(),
             LocalDateTime.now()
@@ -168,6 +178,7 @@ public class DefaultExceptionHandler {
 
         ApiErrorDto apiErrorDto = new ApiErrorDto(
             request.getRequestURI(),
+            "ERRO_EMAIL",            
             mensagem,
             HttpStatus.INTERNAL_SERVER_ERROR.value(),
             LocalDateTime.now()
