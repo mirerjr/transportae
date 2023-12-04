@@ -40,10 +40,8 @@ public class UsuarioService {
         return usuarioRepository.save(novoUsuario);
     }
 
-    public Page<UsuarioModel> listar(int pagina, int quantidade, String campo) {
-        Sort ordenacao = Sort.by(campo).descending();
-        Pageable paginacao = PageRequest.of(pagina, quantidade, ordenacao);
-        return usuarioRepository.findAll(paginacao);
+    public Page<UsuarioModel> listar(Pageable pageable) {
+        return usuarioRepository.findAll(pageable);
     }
 
     public void liberarAcessoUsuario(Long id) {

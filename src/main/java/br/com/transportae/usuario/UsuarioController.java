@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,14 +47,13 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> listar(
-        @RequestParam(name = "pagina") int pagina, 
-        @RequestParam(name = "quantidade") int quantidade,
-        @RequestParam(name = "campo") String campo
+    public ResponseEntity<Page<UsuarioModel>> listar(
+        @PageableDefault(page = 0, size = 10, sort =  "id", direction = Direction.DESC)
+        Pageable pageable
     ){        
         return ResponseEntity
             .ok()
-            .body(usuarioService.listar(pagina, quantidade, campo));
+            .body(usuarioService.listar(pageable));
     }
 
     @GetMapping("/{id}")
