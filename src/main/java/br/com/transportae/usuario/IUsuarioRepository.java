@@ -19,4 +19,6 @@ public interface IUsuarioRepository extends JpaRepository<UsuarioModel, Long> {
     Optional<UsuarioModel> findByEmailOrCpf(String email, String cpf);
 
     Page<UsuarioModel> findAll(Pageable pagina);
+
+    Page<UsuarioModel> findByNomeContainingIgnoreCaseOrEmailContainingIgnoreCaseOrCpfContaining (String nome, String email, String cpf, Pageable pageable);
 }

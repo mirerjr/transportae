@@ -44,6 +44,10 @@ public class UsuarioService {
         return usuarioRepository.findAll(pageable);
     }
 
+    public Page<UsuarioModel> listar(Pageable pageable, String pesquisa) {
+        return usuarioRepository.findByNomeContainingIgnoreCaseOrEmailContainingIgnoreCaseOrCpfContaining(pesquisa, pesquisa, pesquisa, pageable);
+    }
+
     public void liberarAcessoUsuario(Long id) {
         String senha = gerarSenhaPrimeiroAcesso();
 

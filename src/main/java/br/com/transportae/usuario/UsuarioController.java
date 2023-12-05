@@ -48,12 +48,14 @@ public class UsuarioController {
 
     @GetMapping
     public ResponseEntity<Page<UsuarioModel>> listar(
-        @PageableDefault(page = 0, size = 10, sort =  "id", direction = Direction.DESC)
-        Pageable pageable
-    ){        
-        return ResponseEntity
-            .ok()
-            .body(usuarioService.listar(pageable));
+        @PageableDefault(page = 0, size = 10, sort =  "id", direction = Direction.DESC) Pageable pageable,
+        @RequestParam(name = "search", defaultValue = "") String pesquisa
+    ){
+        Page<UsuarioModel> usuarios = pesquisa.length() > 0 
+            ? usuarioService.listar(pageable, pesquisa)
+            : usuarioService.listar(pageable);
+
+        return ResponseEntity.ok().body(usuarios);
     }
 
     @GetMapping("/{id}")
