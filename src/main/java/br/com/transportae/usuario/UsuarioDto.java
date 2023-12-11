@@ -4,10 +4,12 @@ import java.time.LocalDate;
 
 import org.hibernate.validator.constraints.Length;
 
+import br.com.transportae.endereco.EnderecoDto;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,5 +41,8 @@ public class UsuarioDto {
     private String cpf;
     
     @Enumerated(EnumType.STRING)
-    private Perfil perfil;     
+    private Perfil perfil;
+
+    @NotNull(message = "O endereço não pode estar vazio")
+    private EnderecoDto enderecoDto;
 }
