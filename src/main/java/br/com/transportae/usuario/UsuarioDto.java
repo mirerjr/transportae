@@ -44,5 +44,5 @@ public class UsuarioDto {
     private Perfil perfil;
 
     @NotNull(message = "O endereço não pode estar vazio")
-    private EnderecoDto enderecoDto;
+    private EnderecoDto endereco;
 }

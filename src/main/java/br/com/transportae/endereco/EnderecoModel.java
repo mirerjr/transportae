@@ -41,10 +41,10 @@ public class EnderecoModel {
     @Column(length = 35)
     private String cidade;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Double latitude;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Double longitude;
 
     @CreationTimestamp

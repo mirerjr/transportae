@@ -75,7 +75,7 @@ public class UsuarioModel implements UserDetails {
     private Perfil perfil;    
 
     @OneToOne
-    private EnderecoModel enderecoo;
+    private EnderecoModel endereco;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
