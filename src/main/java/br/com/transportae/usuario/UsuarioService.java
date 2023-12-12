@@ -14,8 +14,11 @@ import org.springframework.stereotype.Service;
 
 import br.com.transportae.auth.AutenticacaoService;
 import br.com.transportae.email.EmailService;
+import br.com.transportae.endereco.EnderecoModel;
+import br.com.transportae.endereco.EnderecoService;
 import br.com.transportae.usuario.exceptions.UsuarioExistenteException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -24,18 +27,23 @@ public class UsuarioService {
 
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final EnderecoService enderecoService;
     private final AutenticacaoService autenticacaoService;
 
     @Autowired
     private IUsuarioRepository usuarioRepository;
 
+    @Transactional
     public UsuarioModel cadastrarUsuario(UsuarioDto usuarioDto) {
         if (isUsuarioCadastrado(usuarioDto.getEmail(), usuarioDto.getCpf())) {
             throw new UsuarioExistenteException("Usuário já existente");
         }
 
+        EnderecoModel novoEndereco = enderecoService.cadastrarEndereco(usuarioDto.getEndereco());
         UsuarioModel novoUsuario = converterDtoParaDomain(usuarioDto); 
+        
         novoUsuario.setSenha("*****");
+        novoUsuario.setEndereco(novoEndereco);
 
         return usuarioRepository.save(novoUsuario);
     }

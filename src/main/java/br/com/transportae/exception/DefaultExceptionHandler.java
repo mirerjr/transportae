@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import br.com.transportae.usuario.exceptions.UsuarioExistenteException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -140,6 +141,19 @@ public class DefaultExceptionHandler {
             "ENTIDADE_INEXISTENTE",
             exception.getMessage(),
             HttpStatus.NOT_FOUND.value(),
+            LocalDateTime.now()
+        );
+
+        return new ResponseEntity<ApiErrorDto>(apiErrorDto, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(EntityExistsException.class)
+    public ResponseEntity<ApiErrorDto> handleEntityExistsException(EntityExistsException exception, HttpServletRequest request) {
+        ApiErrorDto apiErrorDto = new ApiErrorDto(
+            request.getRequestURI(),
+            "ENTIDADE_DUPLICADA",
+            exception.getMessage(),
+            HttpStatus.CONFLICT.value(),
             LocalDateTime.now()
         );
 
