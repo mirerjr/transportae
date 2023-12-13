@@ -36,7 +36,7 @@ public class UsuarioService {
     private IUsuarioRepository usuarioRepository;
 
     @Transactional
-    public UsuarioModel cadastrarUsuario(UsuarioDto usuarioDto) {
+    public UsuarioDto cadastrarUsuario(UsuarioDto usuarioDto) {
         if (isUsuarioCadastrado(usuarioDto.getEmail(), usuarioDto.getCpf())) {
             throw new UsuarioExistenteException("Usuário já existente");
         }
@@ -46,6 +46,10 @@ public class UsuarioService {
         
         novoUsuario.setSenha("*****");
         novoUsuario.setEndereco(novoEndereco);
+
+        UsuarioModel usuarioCadastrado = usuarioRepository.save(novoUsuario);
+        return converterDomainParaDto(usuarioCadastrado);
+    }
 
     @Transactional
     public UsuarioDto atualizarUsuario(Long usuarioId, UsuarioDto usuarioDto) {
@@ -64,8 +68,20 @@ public class UsuarioService {
         return converterDomainParaDto(usuarioAtualizado);
     }
 
-    public Page<UsuarioModel> listar(Pageable pageable, String pesquisa) {
-        return usuarioRepository.findByNomeContainingIgnoreCaseOrEmailContainingIgnoreCaseOrCpfContaining(pesquisa, pesquisa, pesquisa, pageable);
+    public Page<UsuarioDto> listar(Pageable pageable, String pesquisa) {
+        Page<UsuarioModel> usuarios = pesquisa.length() > 0 
+            ? usuarioRepository.findByNomeContainingIgnoreCaseOrEmailContainingIgnoreCaseOrCpfContaining(pesquisa, pesquisa, pesquisa, pageable)
+            : usuarioRepository.findAll(pageable);
+
+        return usuarios.map(this::converterDomainParaDto);
+    }
+    
+    public UsuarioDto exibirUsuario(Long id) {
+        UsuarioModel usuario = usuarioRepository
+            .findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+
+        return converterDomainParaDto(usuario);
     }
 
     public void liberarAcessoUsuario(Long id) {

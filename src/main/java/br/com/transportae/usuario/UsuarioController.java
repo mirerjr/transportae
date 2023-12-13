@@ -1,11 +1,7 @@
 package br.com.transportae.usuario;
 
 import java.security.Principal;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -40,31 +36,27 @@ public class UsuarioController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Object> cadastrar(@Valid @RequestBody UsuarioDto usuarioDto) {
+    public ResponseEntity<UsuarioDto> cadastrar(@Valid @RequestBody UsuarioDto usuarioDto) {
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(usuarioService.cadastrarUsuario(usuarioDto));
     }
 
     @GetMapping
-    public ResponseEntity<Page<UsuarioModel>> listar(
+    public ResponseEntity<Page<UsuarioDto>> listar(
         @PageableDefault(page = 0, size = 10, sort =  "id", direction = Direction.DESC) Pageable pageable,
         @RequestParam(name = "search", defaultValue = "") String pesquisa
     ){
-        Page<UsuarioModel> usuarios = pesquisa.length() > 0 
-            ? usuarioService.listar(pageable, pesquisa)
-            : usuarioService.listar(pageable);
-
-        return ResponseEntity.ok().body(usuarios);
+        return ResponseEntity
+            .ok()
+            .body(usuarioService.listar(pageable, pesquisa));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> exibir(@PathVariable Long id) throws EntityNotFoundException {
-        UsuarioModel usuario = usuarioRepository
-            .findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
-            
-        return ResponseEntity.ok().body(usuario);
+    public ResponseEntity<UsuarioDto> exibir(@PathVariable Long id) throws EntityNotFoundException {
+        return ResponseEntity
+            .ok()
+            .body(usuarioService.exibirUsuario(id));
     }
 
     @GetMapping("/logado")
