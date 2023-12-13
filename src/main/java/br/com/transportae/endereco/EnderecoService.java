@@ -2,6 +2,7 @@ package br.com.transportae.endereco;
 
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityExistsException;
@@ -21,6 +22,14 @@ public class EnderecoService {
 
         EnderecoModel novoEndereco = converterDtoParaDomain(endereco);        
         return enderecoRepository.save(novoEndereco);
+    }
+
+    public EnderecoModel atualizarEndereco(EnderecoDto endereco) {
+        EnderecoModel enderecoAtual  = enderecoRepository.findById(endereco.getId())
+            .orElseThrow(() -> new EntityNotFoundException("Endereço não encontrado"));
+
+        BeanUtils.copyProperties(endereco, enderecoAtual);
+        return enderecoRepository.save(enderecoAtual);
     }
 
     public void removerEndereco(Long id) {
@@ -48,16 +57,10 @@ public class EnderecoService {
             .build();
     }
 
-    public EnderecoModel converterDomainParaDto(EnderecoModel endereco) {
-        return EnderecoModel.builder()
-            .descricao(endereco.getDescricao())
-            .numero(endereco.getNumero())
-            .complemento(endereco.getComplemento())
-            .cep(endereco.getCep())
-            .cidade(endereco.getCidade())
-            .latitude(endereco.getLatitude())
-            .longitude(endereco.getLongitude())
-            .build();
+    public EnderecoDto converterDomainParaDto(EnderecoModel endereco) {
+        EnderecoDto enderecoDto = new EnderecoDto();
+        BeanUtils.copyProperties(endereco, enderecoDto);
         
+        return enderecoDto;
     }
 }

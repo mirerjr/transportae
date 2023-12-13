@@ -75,20 +75,10 @@ public class UsuarioController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody UsuarioModel usuarioModel) {
-        Optional<UsuarioModel> usuarioExistente = usuarioRepository.findById(id);
-
-        if (usuarioExistente.isEmpty()) {
-            return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(Collections.singletonMap("error", "Usuário não encontrado"));
-        }
-
-        usuarioModel.setId(id);
-
-        UsuarioModel usuarioAtualizado = usuarioRepository.save(usuarioModel);
-        
-        return ResponseEntity.ok().body(usuarioAtualizado);
+    public ResponseEntity<Object> atualizar(@PathVariable Long id, @Valid @RequestBody UsuarioDto usuario) {
+        return ResponseEntity
+            .ok()
+            .body(usuarioService.atualizarUsuario(id, usuario));
     }
 
     @PatchMapping("/{id}/acesso")

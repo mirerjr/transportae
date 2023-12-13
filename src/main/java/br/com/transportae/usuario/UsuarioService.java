@@ -1,9 +1,11 @@
 package br.com.transportae.usuario;
 
 import java.security.Principal;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -45,11 +47,21 @@ public class UsuarioService {
         novoUsuario.setSenha("*****");
         novoUsuario.setEndereco(novoEndereco);
 
-        return usuarioRepository.save(novoUsuario);
-    }
+    @Transactional
+    public UsuarioDto atualizarUsuario(Long usuarioId, UsuarioDto usuarioDto) {
+        UsuarioModel usuarioAtual  = usuarioRepository.findById(usuarioId)
+            .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 
-    public Page<UsuarioModel> listar(Pageable pageable) {
-        return usuarioRepository.findAll(pageable);
+        
+        BeanUtils.copyProperties(usuarioDto, usuarioAtual);
+        usuarioAtual.setId(usuarioId);
+
+        EnderecoModel enderecoAtualizado = enderecoService.atualizarEndereco(usuarioDto.getEndereco());
+
+        usuarioAtual.setEndereco(enderecoAtualizado);
+
+        UsuarioModel usuarioAtualizado = usuarioRepository.save(usuarioAtual);
+        return converterDomainParaDto(usuarioAtualizado);
     }
 
     public Page<UsuarioModel> listar(Pageable pageable, String pesquisa) {
@@ -82,14 +94,14 @@ public class UsuarioService {
     }
 
     public UsuarioDto converterDomainParaDto(UsuarioModel usuario) {
-        return UsuarioDto.builder()
-            .matricula(usuario.getMatricula())
-            .dataNascimento(usuario.getDataNascimento())
-            .nome(usuario.getNome())
-            .email(usuario.getEmail())
-            .cpf(usuario.getCpf())
-            .perfil(usuario.getPerfil())
-            .build();
+        UsuarioDto usuarioDto = new UsuarioDto();
+        BeanUtils.copyProperties(usuario, usuarioDto);
+
+        if (Objects.nonNull(usuario.getEndereco())) {
+            usuarioDto.setEndereco(enderecoService.converterDomainParaDto(usuario.getEndereco()));
+        }
+
+        return usuarioDto;
     }
 
     public UsuarioDto getUsuarioLogado(Principal principal) {
