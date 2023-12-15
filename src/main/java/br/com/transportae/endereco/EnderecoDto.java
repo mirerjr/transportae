@@ -15,7 +15,7 @@ public class EnderecoDto {
 
     private Long id;
 
-    @NotBlank(message = "Por favor, informe o endereço")
+    @NotBlank(message = "O endereço é um campo obrigatório")
     @Size(max = 255, message = "Por favor, insira um endereço com até 255 caracteres")
     private String descricao;
 
@@ -28,7 +28,11 @@ public class EnderecoDto {
     @Size(max = 9, message = "Por favor, insira um cep com até 9 dígitos")
     private String cep;
 
+    @Size(max = 35, message = "Por favor, insira um bairro com até 35 dígitos")
+    private String bairro;
+
     @Size(max = 35, message = "Por favor, insira uma cidade com até 35 dígitos")
+    @NotBlank(message = "A cidade é um campo obrigatório")
     private String cidade;
 
     private Double latitude;

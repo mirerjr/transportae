@@ -41,6 +41,9 @@ public class EnderecoModel {
     private String cep;
 
     @Column(length = 35)
+    private String bairro;
+
+    @Column(length = 35)
     private String cidade;
 
     @Column(nullable = true)

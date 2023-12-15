@@ -51,6 +51,7 @@ public class EnderecoService {
             .numero(endereco.getNumero())
             .complemento(endereco.getComplemento())
             .cep(endereco.getCep())
+            .bairro(endereco.getBairro())
             .cidade(endereco.getCidade())
             .latitude(endereco.getLatitude())
             .longitude(endereco.getLongitude())
