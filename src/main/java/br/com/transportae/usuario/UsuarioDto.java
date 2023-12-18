@@ -5,8 +5,10 @@ import java.time.LocalDate;
 import org.hibernate.validator.constraints.Length;
 
 import br.com.transportae.endereco.EnderecoDto;
+import br.com.transportae.validators.EnderecoObrigatorioParaAluno;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,6 +22,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EnderecoObrigatorioParaAluno
 public class UsuarioDto {
 
     private Long id;
@@ -43,6 +46,6 @@ public class UsuarioDto {
     @Enumerated(EnumType.STRING)
     private Perfil perfil;
 
-    @NotNull(message = "O endereço não pode estar vazio")
+    @Valid
     private EnderecoDto endereco;
 }

@@ -41,11 +41,13 @@ public class UsuarioService {
             throw new UsuarioExistenteException("Usuário já existente");
         }
 
-        EnderecoModel novoEndereco = enderecoService.cadastrarEndereco(usuarioDto.getEndereco());
-        UsuarioModel novoUsuario = converterDtoParaDomain(usuarioDto); 
-        
+        UsuarioModel novoUsuario = converterDtoParaDomain(usuarioDto);         
         novoUsuario.setSenha("*****");
-        novoUsuario.setEndereco(novoEndereco);
+
+        if (usuarioDto.getEndereco() != null) {
+            EnderecoModel novoEndereco = enderecoService.cadastrarEndereco(usuarioDto.getEndereco());
+            novoUsuario.setEndereco(novoEndereco);
+        }
 
         UsuarioModel usuarioCadastrado = usuarioRepository.save(novoUsuario);
         return converterDomainParaDto(usuarioCadastrado);

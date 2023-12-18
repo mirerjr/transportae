@@ -10,6 +10,7 @@ import org.springframework.mail.MailException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,6 +27,8 @@ public class DefaultExceptionHandler {
 
     @ExceptionHandler({Exception.class, RuntimeException.class})
     public ResponseEntity<ApiErrorDto> handleException(Exception exception, HttpServletRequest request) {
+        exception.printStackTrace();
+        
         ApiErrorDto apiErrorDto = new ApiErrorDto(
             request.getRequestURI(),
             "ERRO_DESCONHECIDO",
@@ -39,9 +42,7 @@ public class DefaultExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorDto> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception, HttpServletRequest request) {
-        String mensagem = "Um ou mais campos são inválidos";
-
-        List<CampoInvalidoDto> erros = exception.getBindingResult()
+        List<CampoInvalidoDto> errosDeCampos = exception.getBindingResult()
             .getFieldErrors()
             .stream()
             .map(fieldError -> new CampoInvalidoDto(
@@ -49,7 +50,17 @@ public class DefaultExceptionHandler {
                     fieldError.getDefaultMessage()
                 )
             )
-            .collect(Collectors.toList());
+            .toList();
+
+        List<String> errosDeObjeto = exception.getBindingResult()
+            .getGlobalErrors()
+            .stream()
+            .map(ObjectError::getDefaultMessage)
+            .toList();
+        
+        String mensagem = errosDeObjeto.size() > 0
+            ? errosDeObjeto.get(0)
+            : "Um ou mais campos são inválidos";
         
         ApiErrorDto apiErrorDto = new ApiErrorDto(
             request.getRequestURI(),
@@ -57,7 +68,7 @@ public class DefaultExceptionHandler {
             mensagem,
             HttpStatus.BAD_REQUEST.value(),
             LocalDateTime.now(),
-            erros
+            errosDeCampos
         );
 
         return new ResponseEntity<ApiErrorDto>(apiErrorDto, HttpStatus.BAD_REQUEST);
