@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import org.hibernate.validator.constraints.Length;
 
 import br.com.transportae.endereco.EnderecoDto;
+import br.com.transportae.instituicao.InstituicaoDto;
 import br.com.transportae.validators.EnderecoObrigatorioParaAluno;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -48,4 +49,7 @@ public class UsuarioDto {
 
     @Valid
     private EnderecoDto endereco;
+
+    @Valid
+    private InstituicaoDto instituicao;
 }

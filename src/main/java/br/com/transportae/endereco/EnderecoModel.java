@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import br.com.transportae.instituicao.InstituicaoModel;
 import br.com.transportae.usuario.UsuarioModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -60,4 +61,8 @@ public class EnderecoModel {
 
     @OneToOne(mappedBy = "endereco")
     private UsuarioModel usuario;
+
+    @OneToOne(mappedBy = "endereco")
+    private InstituicaoModel instituicao;
+
 }

@@ -12,7 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import br.com.transportae.endereco.EnderecoModel;
-
+import br.com.transportae.instituicao.InstituicaoModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -76,6 +76,9 @@ public class UsuarioModel implements UserDetails {
 
     @OneToOne
     private EnderecoModel endereco;
+
+    @OneToOne
+    private InstituicaoModel instituicao;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
