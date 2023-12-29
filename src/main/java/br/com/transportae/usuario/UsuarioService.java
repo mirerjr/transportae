@@ -105,6 +105,7 @@ public class UsuarioService {
             .matricula(usuarioDto.getMatricula())
             .dataNascimento(usuarioDto.getDataNascimento())
             .nome(usuarioDto.getNome())
+            .telefone(usuarioDto.getTelefone())
             .email(usuarioDto.getEmail())
             .cpf(usuarioDto.getCpf())
             .perfil(usuarioDto.getPerfil())
