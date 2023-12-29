@@ -1,5 +1,8 @@
 package br.com.transportae.endereco;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
@@ -63,5 +66,20 @@ public class EnderecoService {
         BeanUtils.copyProperties(endereco, enderecoDto);
         
         return enderecoDto;
+    }
+
+    public EnderecoModel getEnderecoMock(int pos) {
+        EnderecoModel endereco = EnderecoModel.builder()
+            .descricao("Rua " + pos)
+            .numero(""+ pos)
+            .complemento("Complemento " + pos)
+            .cep("00000-000")
+            .bairro("Bairro " + pos)
+            .cidade("Cidade " + pos)
+            .latitude(-23.5505199)
+            .longitude(-46.6333094)
+            .build();
+
+        return enderecoRepository.save(endereco);
     }
 }

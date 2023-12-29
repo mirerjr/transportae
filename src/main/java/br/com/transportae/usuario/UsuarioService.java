@@ -161,6 +161,7 @@ public class UsuarioService {
                 .email("mirer"+ pos +"@gmail.com")
                 .telefone("(00) 00000-0000")
                 .matricula("0" + pos)
+                .endereco(enderecoService.getEnderecoMock(pos))
                 .cpf(cpf)
                 .senha("$2a$12$FJve86hShTAnCXXjHjVHNOB7nA7B/0DEc.jeUGzP3TcQYqPehFl.a")
                 .build();        

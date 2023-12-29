@@ -25,7 +25,7 @@ public class EnderecoDto {
     @Size(max = 255, message = "Por favor, insira um complemento com até 255 caracteres")
     private String complemento;
 
-    @Size(max = 9, message = "Por favor, insira um cep com até 9 dígitos")
+    @Size(max = 9, message = "Por favor, insira um CEP com até 9 dígitos")
     private String cep;
 
     @Size(max = 35, message = "Por favor, insira um bairro com até 35 dígitos")
