@@ -36,7 +36,8 @@ public class InstituicaoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> exibir(@PathVariable Long id) {
-        return ResponseEntity.ok(instituicaoService.exibirInstituicao(id));
+        InstituicaoModel instituicao = instituicaoService.getInstituicao(id);
+        return ResponseEntity.ok(instituicaoService.converterDomainParaDto(instituicao));
     }
 
     @PutMapping("/{id}")

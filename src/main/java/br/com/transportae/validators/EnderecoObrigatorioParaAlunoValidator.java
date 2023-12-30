@@ -13,7 +13,8 @@ public class EnderecoObrigatorioParaAlunoValidator implements ConstraintValidato
     @Override
     public boolean isValid(UsuarioDto usuarioDto, ConstraintValidatorContext context) {
         boolean isAluno = usuarioDto.getPerfil().name().equals("ALUNO");
-        return !isAluno || (isAluno && usuarioDto.getEndereco() != null);
-    }
-    
+        boolean hasEndereco = usuarioDto.getEndereco() != null;
+
+        return !isAluno || hasEndereco;
+    }    
 }

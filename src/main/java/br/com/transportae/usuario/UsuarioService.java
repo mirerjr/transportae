@@ -18,6 +18,8 @@ import br.com.transportae.auth.AutenticacaoService;
 import br.com.transportae.email.EmailService;
 import br.com.transportae.endereco.EnderecoModel;
 import br.com.transportae.endereco.EnderecoService;
+import br.com.transportae.instituicao.InstituicaoModel;
+import br.com.transportae.instituicao.InstituicaoService;
 import br.com.transportae.usuario.exceptions.UsuarioExistenteException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -30,6 +32,7 @@ public class UsuarioService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final EnderecoService enderecoService;
+    private final InstituicaoService instituicaoService;
     private final AutenticacaoService autenticacaoService;
 
     @Autowired
@@ -47,6 +50,11 @@ public class UsuarioService {
         if (usuarioDto.getEndereco() != null) {
             EnderecoModel novoEndereco = enderecoService.cadastrarEndereco(usuarioDto.getEndereco());
             novoUsuario.setEndereco(novoEndereco);
+        }
+
+        if (usuarioDto.getInstituicaoId() != null) {
+            InstituicaoModel instituicao = instituicaoService.getInstituicao(usuarioDto.getInstituicaoId());
+            novoUsuario.setInstituicao(instituicao);
         }
 
         UsuarioModel usuarioCadastrado = usuarioRepository.save(novoUsuario);
@@ -118,6 +126,10 @@ public class UsuarioService {
 
         if (Objects.nonNull(usuario.getEndereco())) {
             usuarioDto.setEndereco(enderecoService.converterDomainParaDto(usuario.getEndereco()));
+        }
+
+        if (Objects.nonNull(usuario.getInstituicao())) {
+            usuarioDto.setInstituicao(instituicaoService.converterDomainParaDto(usuario.getInstituicao()));
         }
 
         return usuarioDto;

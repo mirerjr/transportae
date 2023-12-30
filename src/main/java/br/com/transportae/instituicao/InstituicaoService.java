@@ -41,7 +41,7 @@ public class InstituicaoService {
         return id != null && instituicaoRepository.existsById(id);
     }
     
-    private InstituicaoModel converterDtoParaDomain(InstituicaoDto instituicaoDto) {
+    public InstituicaoModel converterDtoParaDomain(InstituicaoDto instituicaoDto) {
         return InstituicaoModel.builder()
             .nome(instituicaoDto.getNome())
             .sigla(instituicaoDto.getSigla())
@@ -49,14 +49,12 @@ public class InstituicaoService {
             .build();
     }
 
-    public InstituicaoDto exibirInstituicao(Long id) {
-        InstituicaoModel instituicao = instituicaoRepository.findById(id)
+    public InstituicaoModel getInstituicao(Long id) {
+        return instituicaoRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Instituição não encontrada"));
-
-        return converterDomainParaDto(instituicao);
     }
 
-    private InstituicaoDto converterDomainParaDto(InstituicaoModel instituicao) {
+    public InstituicaoDto converterDomainParaDto(InstituicaoModel instituicao) {
         InstituicaoDto instituicaoDto = new InstituicaoDto();
         BeanUtils.copyProperties(instituicao, instituicaoDto);
 
