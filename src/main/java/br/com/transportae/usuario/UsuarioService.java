@@ -188,9 +188,10 @@ public class UsuarioService {
                 .toLocalDate();
 
             String matricula = LocalDate.now().getYear() + "" + faker.number().digits(6);
+            Perfil perfil = faker.bool().bool() ? Perfil.ALUNO : Perfil.MOTORISTA;
 
             UsuarioModel usuario = UsuarioModel.builder()
-                .perfil(Perfil.ALUNO)
+                .perfil(perfil)
                 .nome(nomeCompleto)
                 .email(formatEmailMock(nomeCompleto))
                 .telefone(faker.phoneNumber().cellPhone())
