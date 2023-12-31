@@ -49,21 +49,29 @@ public class UsuarioService {
             throw new UsuarioExistenteException("Usuário já existente");
         }
 
-        UsuarioModel novoUsuario = converterDtoParaDomain(usuarioDto);         
+        UsuarioModel novoUsuario = converterDtoParaDomain(usuarioDto);
+        
+        vincularEndereco(usuarioDto, novoUsuario);
+        vincularInstituicao(usuarioDto, novoUsuario);
+        
         novoUsuario.setSenha("*****");
-
-        if (usuarioDto.getEndereco() != null) {
-            EnderecoModel novoEndereco = enderecoService.cadastrarEndereco(usuarioDto.getEndereco());
-            novoUsuario.setEndereco(novoEndereco);
-        }
-
-        if (usuarioDto.getInstituicaoId() != null) {
-            InstituicaoModel instituicao = instituicaoService.getInstituicao(usuarioDto.getInstituicaoId());
-            novoUsuario.setInstituicao(instituicao);
-        }
 
         UsuarioModel usuarioCadastrado = usuarioRepository.save(novoUsuario);
         return converterDomainParaDto(usuarioCadastrado);
+    }
+
+    private void vincularEndereco(UsuarioDto usuarioDto, UsuarioModel usuario) {
+        if (Objects.nonNull(usuarioDto.getEndereco())) {
+            EnderecoModel endereco = enderecoService.cadastrarEndereco(usuarioDto.getEndereco());
+            usuario.setEndereco(endereco);
+        }
+    }
+
+    private void vincularInstituicao(UsuarioDto usuarioDto, UsuarioModel usuario) {
+        if (Objects.nonNull(usuarioDto.getInstituicaoId()) && usuarioDto.getPerfil().equals(Perfil.ALUNO)) {
+            InstituicaoModel instituicao = instituicaoService.getInstituicao(usuarioDto.getInstituicaoId());
+            usuario.setInstituicao(instituicao);
+        }
     }
 
     @Transactional
