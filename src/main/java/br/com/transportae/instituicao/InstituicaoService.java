@@ -1,5 +1,7 @@
 package br.com.transportae.instituicao;
 
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import org.springframework.beans.BeanUtils;
@@ -14,6 +16,8 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import net.datafaker.Faker;
+import net.datafaker.providers.base.University;
 
 @Service
 @RequiredArgsConstructor
@@ -90,10 +94,17 @@ public class InstituicaoService {
     }
 
     public void cadastrarInstituicaoMock(int quantidade) {
+        Faker faker = new Faker(Locale.forLanguageTag("pt_BR"));
+        
         for (int pos = 0; pos < quantidade; pos++) {
+            University instituicaoMock = faker.university();
+
+            String nome = instituicaoMock.name();
+            String sigla = gerarSiglaMock(nome);
+
             InstituicaoModel instituicao = InstituicaoModel.builder()
-                .nome("Instituição " + pos)
-                .sigla("IFS " + pos)
+                .nome(nome)
+                .sigla(sigla)
                 .endereco(enderecoService.getEnderecoMock(pos))
                 .tipoInstituicao(TipoInstituicao.INSTITUTO_TECNICO_SUPERIOR)
                 .build();
@@ -101,4 +112,13 @@ public class InstituicaoService {
             instituicaoRepository.save(instituicao);
         }
     }
+
+    private String gerarSiglaMock(String nome) {
+        List<String> iniciais = List.of(nome.split(" ")).stream()
+            .map(String::toUpperCase)
+            .map(palavra -> palavra.substring(0, 1))
+            .toList();
+
+        return String.join("", iniciais);
+    }   
 }
