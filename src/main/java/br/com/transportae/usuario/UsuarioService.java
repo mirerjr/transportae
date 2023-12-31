@@ -98,13 +98,10 @@ public class UsuarioService {
 
         return usuarios.map(this::converterDomainParaDto);
     }
-    
-    public UsuarioDto exibirUsuario(Long id) {
-        UsuarioModel usuario = usuarioRepository
+    public UsuarioModel getUsuario(Long id) {
+        return usuarioRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
-
-        return converterDomainParaDto(usuario);
     }
 
     public void liberarAcessoUsuario(Long id) {

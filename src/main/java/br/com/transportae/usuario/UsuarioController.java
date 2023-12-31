@@ -54,9 +54,10 @@ public class UsuarioController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDto> exibir(@PathVariable Long id) throws EntityNotFoundException {
-        return ResponseEntity
-            .ok()
-            .body(usuarioService.exibirUsuario(id));
+        UsuarioModel usuario = usuarioService.getUsuario(id);
+
+        return ResponseEntity.ok()
+            .body(usuarioService.converterDomainParaDto(usuario));
     }
 
     @GetMapping("/logado")
