@@ -1,10 +1,14 @@
 package br.com.transportae.usuario;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +28,7 @@ import br.com.transportae.usuario.exceptions.UsuarioExistenteException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import net.datafaker.Faker;
 
 @Service
 @RequiredArgsConstructor
@@ -164,22 +169,47 @@ public class UsuarioService {
 	}
 
     public void cadastrarUsuarioMock(int quantidade) {
+        Faker faker = new Faker(Locale.forLanguageTag("pt-BR"));
+
         for (int pos = 1; pos <= quantidade; pos++) {
-            String cpf = pos > 9 ? "000000000" + pos : "0000000000" + pos;
+            String nomeCompleto = faker.name().fullName();
+            
+            LocalDate nascimento = faker.date()
+                .birthday(18, 30)
+                .toLocalDateTime()
+                .toLocalDate();
+
+            String matricula = LocalDate.now().getYear() + "" + faker.number().digits(6);
 
             UsuarioModel usuario = UsuarioModel.builder()
                 .perfil(Perfil.ALUNO)
-                .nome("Mirer " + pos)
-                .email("mirer"+ pos +"@gmail.com")
-                .telefone("(00) 00000-0000")
-                .matricula("0" + pos)
+                .nome(nomeCompleto)
+                .email(formatEmailMock(nomeCompleto))
+                .telefone(faker.phoneNumber().cellPhone())
+                .dataNascimento(nascimento)
+                .matricula(matricula)
                 .endereco(enderecoService.getEnderecoMock(pos))
-                .cpf(cpf)
+                .cpf(faker.cpf().valid(false))
                 .senha("$2a$12$FJve86hShTAnCXXjHjVHNOB7nA7B/0DEc.jeUGzP3TcQYqPehFl.a")
-                .build();        
+                .build();
+
             usuarioRepository.save(usuario);
         }
 	}
+
+    private String formatEmailMock(String nomeCompleto) {
+        List<String> nomes = List.of(nomeCompleto.split(" "))
+            .stream()
+            .map(String::toLowerCase)
+            .map(StringUtils::stripAccents)
+            .map(nome -> nome.replace(".", ""))
+            .toList();
+
+        String primeiroNome = nomes.get(0);
+        String ultimoNome = nomes.get(nomes.size() - 1);
+
+        return primeiroNome + "." + ultimoNome + "@gmail.com";
+    }
     
     public String gerarSenhaPrimeiroAcesso() {
         int tamanhoSenha = 10;
