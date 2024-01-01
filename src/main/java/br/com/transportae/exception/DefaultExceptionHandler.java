@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
@@ -156,6 +157,22 @@ public class DefaultExceptionHandler {
         );
 
         return new ResponseEntity<ApiErrorDto>(apiErrorDto, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiErrorDto> handleDataIntegrityViolationException(DataIntegrityViolationException exception, HttpServletRequest request) {
+        exception.printStackTrace();
+        String mensagem = "Erro de vínculo de dados. Por favor, tente novamente";
+
+        ApiErrorDto apiErrorDto = new ApiErrorDto(
+            request.getRequestURI(),
+            "ERRO_INTEGRIDADE",
+            mensagem,
+            HttpStatus.BAD_REQUEST.value(),
+            LocalDateTime.now()
+        );
+
+        return new ResponseEntity<ApiErrorDto>(apiErrorDto, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(EntityExistsException.class)
