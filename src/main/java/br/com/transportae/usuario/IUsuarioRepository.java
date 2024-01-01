@@ -1,5 +1,6 @@
 package br.com.transportae.usuario;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -21,4 +22,5 @@ public interface IUsuarioRepository extends JpaRepository<UsuarioModel, Long> {
     Page<UsuarioModel> findAll(Pageable pagina);
 
     Page<UsuarioModel> findByNomeContainingIgnoreCaseOrEmailContainingIgnoreCaseOrCpfContaining (String nome, String email, String cpf, Pageable pageable);
+    List<UsuarioModel> findAllByPerfil(Perfil motorista);
 }

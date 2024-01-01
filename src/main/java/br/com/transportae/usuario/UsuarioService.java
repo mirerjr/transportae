@@ -98,6 +98,12 @@ public class UsuarioService {
 
         return usuarios.map(this::converterDomainParaDto);
     }
+
+    public List<UsuarioModel> listarMotoristas() {
+        List<UsuarioModel> motoristas = usuarioRepository.findAllByPerfil(Perfil.MOTORISTA);
+        return motoristas;
+    }
+    
     public UsuarioModel getUsuario(Long id) {
         return usuarioRepository
             .findById(id)

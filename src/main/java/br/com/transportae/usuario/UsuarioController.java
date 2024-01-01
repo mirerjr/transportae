@@ -1,6 +1,7 @@
 package br.com.transportae.usuario;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -51,6 +52,19 @@ public class UsuarioController {
             .ok()
             .body(usuarioService.listar(pageable, pesquisa));
     }
+
+    // TODO: Flexibilizar para listar por tipo de usuário
+    @GetMapping("/motoristas")
+    public ResponseEntity<?> listarMotoristas() {
+        List<UsuarioModel> motoristas = usuarioService.listarMotoristas();
+
+        return ResponseEntity.ok()
+            .body(motoristas.stream()
+                .map(usuarioService::converterDomainParaDto)
+                .toList()
+        );
+    }
+    
 
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDto> exibir(@PathVariable Long id) throws EntityNotFoundException {
