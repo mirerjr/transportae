@@ -1,14 +1,12 @@
-package br.com.transportae.linhaTransporte;
+package br.com.transportae.usuarioLinha;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import br.com.transportae.itinerario.ItinerarioModel;
-import br.com.transportae.pontoParada.PontoParadaModel;
-import br.com.transportae.usuarioLinha.UsuarioLinhaModel;
+import br.com.transportae.linhaTransporte.LinhaTransporteModel;
+import br.com.transportae.usuario.UsuarioModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,7 +14,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,37 +22,28 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@Entity(name = "linha_transporte")
+@Entity(name = "usuario_linha")
 @AllArgsConstructor
 @NoArgsConstructor
-public class LinhaTransporteModel {
+public class UsuarioLinhaModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Builder.Default
-    private boolean ativa = false;
-
     @Column(nullable = false)
-    private String nome;
-    
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Turno turno;
-
-    @Column
-    private LocalDateTime ativadaEm;
+    private PerfilLinha perfilLinha;
 
     @CreationTimestamp
     private LocalDateTime dataCadastro;
 
     @UpdateTimestamp
     private LocalDateTime dataAtualizacao;
-    
-    @OneToMany(mappedBy = "linhaTransporte")
-    List<UsuarioLinhaModel> usuariosLinha;
 
-    @OneToMany(mappedBy = "linhaVinculada")
-    List<UsuarioModel> alunos;
+    @ManyToOne
+    private UsuarioModel usuario;
+    
+    @ManyToOne
+    private LinhaTransporteModel linhaTransporte;
 }

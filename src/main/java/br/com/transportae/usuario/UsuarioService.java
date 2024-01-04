@@ -25,6 +25,7 @@ import br.com.transportae.endereco.EnderecoService;
 import br.com.transportae.instituicao.InstituicaoModel;
 import br.com.transportae.instituicao.InstituicaoService;
 import br.com.transportae.usuario.exceptions.UsuarioExistenteException;
+import br.com.transportae.usuarioLinha.UsuarioLinhaService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,7 @@ public class UsuarioService {
     private final EmailService emailService;
     private final EnderecoService enderecoService;
     private final InstituicaoService instituicaoService;
+    private final UsuarioLinhaService usuarioLinhaService;
     private final AutenticacaoService autenticacaoService;
 
     @Autowired
@@ -57,6 +59,8 @@ public class UsuarioService {
         novoUsuario.setSenha("*****");
 
         UsuarioModel usuarioCadastrado = usuarioRepository.save(novoUsuario);
+        usuarioLinhaService.vincularUsuarioLinha(usuarioCadastrado, usuarioDto.getLinhaTransporteId());
+
         return converterDomainParaDto(usuarioCadastrado);
     }
 

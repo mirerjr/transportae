@@ -13,8 +13,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
+import br.com.transportae.usuario.UsuarioService;
+import br.com.transportae.usuarioLinha.UsuarioLinhaModel;
+import br.com.transportae.usuarioLinha.UsuarioLinhaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 // TODO: Criar endpoints para vincular alunos e pontos
 @RestController
@@ -24,6 +30,8 @@ import lombok.RequiredArgsConstructor;
 public class LinhaTransporteController {
 
     private final LinhaTransporteService linhaTransporteService;
+    private final UsuarioLinhaService usuarioLinhaService;
+    private final UsuarioService usuarioService;
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -46,23 +54,26 @@ public class LinhaTransporteController {
             : linhaTransporteService.listarLinhasTransporte(pageable, pesquisa);
 
         return ResponseEntity.ok(linhasTransporte
-            .map(linhaTransporteService::converterDomainParaDto));
-    }
-
-    @GetMapping("/motoristas/{id}")
-    public ResponseEntity<List<LinhaTransporteDto>> listarPorMotorista(@PathVariable Long id) {
-        List<LinhaTransporteModel> linhasTransporte = linhaTransporteService.getLinhasTransportePorMotorista(id);
-
-        return ResponseEntity.ok(linhasTransporte.stream()
             .map(linhaTransporteService::converterDomainParaDto)
-            .toList()
-        );
+            .map(linhaDto -> {
+                linhaDto.setTotalUsuarios(usuarioLinhaService.contarUsuariosPorLinha(linhaDto.getId()));
+                return linhaDto;
+            }));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<LinhaTransporteDto> exibir(@PathVariable Long id) {
         LinhaTransporteModel linhaTransporte = linhaTransporteService.getLinhaTransporte(id);
         return ResponseEntity.ok(linhaTransporteService.converterDomainParaDto(linhaTransporte));
+    }
+
+    @GetMapping("/{id}/usuarios")
+    public ResponseEntity<?> exibirUsuarios(@PathVariable Long id) {
+        return ResponseEntity.ok(usuarioLinhaService
+            .listarUsuariosPorLinha(id).stream()
+            .map(UsuarioLinhaModel::getUsuario)
+            .map(usuarioService::converterDomainParaDto)
+            .toList());
     }
 
     @PutMapping("/{id}")

@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.transportae.linhaTransporte.LinhaTransporteService;
+import br.com.transportae.usuarioLinha.UsuarioLinhaModel;
+import br.com.transportae.usuarioLinha.UsuarioLinhaService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +33,10 @@ import lombok.RequiredArgsConstructor;
 @EnableMethodSecurity(securedEnabled = true)
 @RequiredArgsConstructor
 public class UsuarioController {
-
     
-    private final IUsuarioRepository usuarioRepository;    
     private final UsuarioService usuarioService;
+    private final UsuarioLinhaService usuarioLinhaService;
+    private final LinhaTransporteService linhaTransporteService;
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -48,9 +51,7 @@ public class UsuarioController {
         @PageableDefault(page = 0, size = 10, sort =  "id", direction = Direction.DESC) Pageable pageable,
         @RequestParam(name = "search", defaultValue = "") String pesquisa
     ){
-        return ResponseEntity
-            .ok()
-            .body(usuarioService.listar(pageable, pesquisa));
+        return ResponseEntity.ok(usuarioService.listar(pageable, pesquisa));
     }
 
     // TODO: Flexibilizar para listar por tipo de usuário
@@ -73,6 +74,17 @@ public class UsuarioController {
         return ResponseEntity.ok()
             .body(usuarioService.converterDomainParaDto(usuario));
     }
+
+    @GetMapping("/{id}/linhas")
+    public ResponseEntity<?> listarLinhasPorUsuario(@PathVariable Long id) {
+        return ResponseEntity.ok(usuarioLinhaService
+            .listarLinhasPorUsuario(id).stream()
+            .map(UsuarioLinhaModel::getLinhaTransporte)
+            .map(linhaTransporteService::converterDomainParaDto)
+            .toList()            
+        );
+    }
+
 
     @GetMapping("/logado")
     public ResponseEntity<UsuarioDto> getUsuarioLogado(Principal principal) {

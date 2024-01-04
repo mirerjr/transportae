@@ -26,10 +26,7 @@ public class LinhaTransporteDto {
     @Enumerated(EnumType.STRING)
     private Turno turno;
 
-    @NotNull(message = "É necessário vincular um motorista")
-    private Long motoristaId;
 
-    private UsuarioDto motorista;
-
-    //TODO Retornar quantitativo de alunos e pontos vinculados
+    private Integer totalUsuarios;
+    //TODO Retornar quantitativo de pontos vinculados
 }

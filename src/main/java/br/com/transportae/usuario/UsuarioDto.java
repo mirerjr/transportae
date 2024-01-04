@@ -53,6 +53,6 @@ public class UsuarioDto {
 
     private InstituicaoDto instituicao;
 
-    //TODO: Criar um DTO específico para o aluno
     private Long instituicaoId;
+    private Long linhaTransporteId;
 }

@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import br.com.transportae.endereco.EnderecoModel;
 import br.com.transportae.instituicao.InstituicaoModel;
-import br.com.transportae.linhaTransporte.LinhaTransporteModel;
+import br.com.transportae.usuarioLinha.UsuarioLinhaModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -83,11 +83,8 @@ public class UsuarioModel implements UserDetails {
     @ManyToOne
     private InstituicaoModel instituicao;
 
-    @OneToOne
-    private LinhaTransporteModel linhaVinculada;
-
-    @OneToMany(mappedBy = "motorista")
-    private List<LinhaTransporteModel> linhaConduzida;
+    @OneToMany(mappedBy = "usuario")
+    List<UsuarioLinhaModel> linhasUsuario;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

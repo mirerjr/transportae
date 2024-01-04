@@ -11,12 +11,10 @@ public interface ILinhaTransporteRepository extends JpaRepository<LinhaTransport
 
     Optional<LinhaTransporteModel> findById(Long id);
     
-    List<LinhaTransporteModel> findAllByMotoristaId(Long id);
     
     Page<LinhaTransporteModel> findAll(Pageable pagina);
     Page<LinhaTransporteModel> findAllByTurno(Turno turno, Pageable pageable);
     Page<LinhaTransporteModel> findAllByNomeContainingIgnoreCase(String nome, Pageable pageable);
     Page<LinhaTransporteModel> findAllByTurnoAndNomeContainingIgnoreCase(Turno turno, String nome, Pageable pageable);
 
-    Optional<LinhaTransporteModel> findByMotoristaIdAndTurno(Long id, Turno turno);
 }
