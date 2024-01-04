@@ -1,5 +1,6 @@
 package br.com.transportae.instituicao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -93,8 +94,9 @@ public class InstituicaoService {
         return converterDomainParaDto(instituicaoAtualizada);
     }
 
-    public void cadastrarInstituicaoMock(int quantidade) {
+    public List<InstituicaoModel> cadastrarInstituicaoMock(int quantidade) {
         Faker faker = new Faker(Locale.forLanguageTag("pt_BR"));
+        List<InstituicaoModel> instituicoes = new ArrayList<>();
         
         for (int pos = 0; pos < quantidade; pos++) {
             University instituicaoMock = faker.university();
@@ -109,8 +111,11 @@ public class InstituicaoService {
                 .tipoInstituicao(TipoInstituicao.INSTITUTO_TECNICO_SUPERIOR)
                 .build();
 
-            instituicaoRepository.save(instituicao);
+            InstituicaoModel instituicaoCadastrada = instituicaoRepository.save(instituicao);
+            instituicoes.add(instituicaoCadastrada);
         }
+
+        return instituicoes;
     }
 
     private String gerarSiglaMock(String nome) {

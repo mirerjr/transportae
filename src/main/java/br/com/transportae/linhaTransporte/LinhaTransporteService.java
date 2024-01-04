@@ -1,6 +1,7 @@
 package br.com.transportae.linhaTransporte;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -84,8 +85,9 @@ public class LinhaTransporteService {
         return linhaTransporteRepository.save(linhaTransporte);
     }   
 
-    public void cadastrarLinhaTransporteMock(int quantidade) {
+    public List<LinhaTransporteModel> cadastrarLinhaTransporteMock(int quantidade) {
         Faker faker = new Faker(Locale.forLanguageTag("pt_BR"));
+        List<LinhaTransporteModel> linhasTransporte = new ArrayList<>();
 
         for (int pos = 0; pos < quantidade; pos++) {    
             int posicaoAleatoria = faker.number()
@@ -98,7 +100,10 @@ public class LinhaTransporteService {
                 .turno(turno)
                 .build();
 
-            linhaTransporteRepository.save(linhaTransporte);
+            LinhaTransporteModel linhaCadastrada = linhaTransporteRepository.save(linhaTransporte);
+            linhasTransporte.add(linhaCadastrada);
         }
+
+        return linhasTransporte;
     }
 }

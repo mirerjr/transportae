@@ -2,6 +2,7 @@ package br.com.transportae.usuario;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -76,6 +77,11 @@ public class UsuarioService {
             InstituicaoModel instituicao = instituicaoService.getInstituicao(usuarioDto.getInstituicaoId());
             usuario.setInstituicao(instituicao);
         }
+    }
+
+    public void atualizarInstituicao(UsuarioModel usuario, InstituicaoModel instituicao) {
+        usuario.setInstituicao(instituicao);
+        usuarioRepository.save(usuario);
     }
 
     @Transactional
@@ -183,8 +189,9 @@ public class UsuarioService {
         usuarioRepository.save(admin);
 	}
 
-    public void cadastrarUsuarioMock(int quantidade) {
+    public List<UsuarioModel> cadastrarUsuarioMock(int quantidade) {
         Faker faker = new Faker(Locale.forLanguageTag("pt-BR"));
+        List<UsuarioModel> usuarios = new ArrayList<>();
 
         for (int pos = 1; pos <= quantidade; pos++) {
             String nomeCompleto = faker.name().fullName();
@@ -208,9 +215,12 @@ public class UsuarioService {
                 .cpf(faker.cpf().valid(false))
                 .senha("$2a$12$FJve86hShTAnCXXjHjVHNOB7nA7B/0DEc.jeUGzP3TcQYqPehFl.a")
                 .build();
-
-            usuarioRepository.save(usuario);
+            
+            UsuarioModel usuarioCadastrado = usuarioRepository.save(usuario);
+            usuarios.add(usuarioCadastrado);
         }
+
+        return usuarios;
 	}
 
     private String formatEmailMock(String nomeCompleto) {
