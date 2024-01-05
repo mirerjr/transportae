@@ -3,6 +3,7 @@ package br.com.transportae.linhaTransporte;
 import br.com.transportae.usuario.UsuarioDto;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,12 @@ public class LinhaTransporteDto {
     @NotNull(message = "O turno é um campo obrigatório")
     @Enumerated(EnumType.STRING)
     private Turno turno;
+
+    @Min(value = 3, message = "O total de assentos deve ser maior que 2")
+    @NotNull(message = "O total de assentos é um campo obrigatório")
+    private Short totalAssentos;
+    
+    private String codigoVeiculo;
 
 
     private Integer totalUsuarios;

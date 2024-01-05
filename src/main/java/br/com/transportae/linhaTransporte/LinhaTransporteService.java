@@ -33,6 +33,8 @@ public class LinhaTransporteService {
             .id(linhaTransporteDto.getId())
             .nome(linhaTransporteDto.getNome())
             .turno(linhaTransporteDto.getTurno())
+            .totalAssentos(linhaTransporteDto.getTotalAssentos())
+            .codigoVeiculo(linhaTransporteDto.getCodigoVeiculo())
             .build();
     }
 
@@ -98,6 +100,8 @@ public class LinhaTransporteService {
             LinhaTransporteModel linhaTransporte = LinhaTransporteModel.builder()
                 .nome("Linha " + pos)
                 .turno(turno)
+                .totalAssentos((short) faker.number().numberBetween(10, 50))
+                .codigoVeiculo(faker.code().ean8())
                 .build();
 
             LinhaTransporteModel linhaCadastrada = linhaTransporteRepository.save(linhaTransporte);

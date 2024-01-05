@@ -43,6 +43,11 @@ public class LinhaTransporteModel {
     @Column(nullable = false)
     private Turno turno;
 
+    @Column(nullable = false)
+    private Short totalAssentos;
+    
+    private String codigoVeiculo;
+    
     @Column
     private LocalDateTime ativadaEm;
 

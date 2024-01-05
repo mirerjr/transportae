@@ -64,7 +64,11 @@ public class LinhaTransporteController {
     @GetMapping("/{id}")
     public ResponseEntity<LinhaTransporteDto> exibir(@PathVariable Long id) {
         LinhaTransporteModel linhaTransporte = linhaTransporteService.getLinhaTransporte(id);
-        return ResponseEntity.ok(linhaTransporteService.converterDomainParaDto(linhaTransporte));
+        LinhaTransporteDto linhaDto = linhaTransporteService.converterDomainParaDto(linhaTransporte);
+
+        linhaDto.setTotalUsuarios(usuarioLinhaService.contarUsuariosPorLinha(linhaDto.getId()));
+        
+        return ResponseEntity.ok(linhaDto);
     }
 
     @GetMapping("/{id}/usuarios")
