@@ -44,6 +44,14 @@ public class UsuarioLinhaService {
         return usuarioLinhaRepository.save(usuarioLinha);
     }
 
+    public void desvincularUsuarioLinha(UsuarioModel usuario, Long idLinha) {
+        LinhaTransporteModel linha = linhaTransporteService.getLinhaTransporte(idLinha);
+        PerfilLinha perfilLinha = PerfilLinha.valueOf(usuario.getPerfil().name());
+
+        UsuarioLinhaModel usuarioLinha = getUsuarioLinha(usuario, linha, perfilLinha);
+        usuarioLinhaRepository.delete(usuarioLinha);
+    }
+
     public List<UsuarioLinhaModel> listarLinhasPorUsuario(Long id) {
         return usuarioLinhaRepository.findAllByUsuarioId(id);
     }

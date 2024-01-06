@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -85,6 +86,20 @@ public class UsuarioController {
         );
     }
 
+    @PutMapping("/{id}/linhas/{idLinha}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> vincularLinha(@PathVariable Long id, @PathVariable Long idLinha) {
+        UsuarioModel usuario = usuarioService.getUsuario(id);
+        return ResponseEntity.ok(usuarioLinhaService.vincularUsuarioLinha(usuario, idLinha));
+    }
+
+    @DeleteMapping("/{id}/linhas/{idLinha}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> desvincularLinha(@PathVariable Long id, @PathVariable Long idLinha) {
+        UsuarioModel usuario = usuarioService.getUsuario(id);
+        usuarioLinhaService.desvincularUsuarioLinha(usuario, idLinha);
+        return ResponseEntity.ok().build();
+    }
 
     @GetMapping("/logado")
     public ResponseEntity<UsuarioDto> getUsuarioLogado(Principal principal) {
