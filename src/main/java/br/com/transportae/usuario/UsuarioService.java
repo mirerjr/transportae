@@ -184,6 +184,7 @@ public class UsuarioService {
             .matricula("01")
             .cpf("00000000000")
             .senha("$2a$12$FJve86hShTAnCXXjHjVHNOB7nA7B/0DEc.jeUGzP3TcQYqPehFl.a")
+            .emailVerificado(true)
             .build();
         
         usuarioRepository.save(admin);
@@ -213,6 +214,7 @@ public class UsuarioService {
                 .matricula(matricula)
                 .endereco(enderecoService.getEnderecoMock(pos))
                 .cpf(faker.cpf().valid(false))
+                .emailVerificado(true)
                 .senha("$2a$12$FJve86hShTAnCXXjHjVHNOB7nA7B/0DEc.jeUGzP3TcQYqPehFl.a")
                 .build();
             
