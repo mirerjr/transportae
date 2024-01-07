@@ -8,6 +8,11 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import br.com.transportae.endereco.EnderecoDto;
+import br.com.transportae.instituicao.InstituicaoDto;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -15,15 +20,25 @@ import java.time.LocalTime;
 public class PontoParadaDto {
 
     private Long id;
+
+    @NotBlank(message = "O nome é um campo obrigatório")
     private String nome;
-    private LocalTime horarioPrevisto;
+
+    @NotNull(message = "O horário previsto da ida é um campo obrigatório")
+    private LocalTime horarioPrevistoIda;
+
+    @NotNull(message = "O horário previsto da volta é um campo obrigatório")
+    private LocalTime horarioPrevistoVolta;
+
     private LocalDateTime dataCadastro;
     private LocalDateTime dataAtualizacao;
-    private Long enderecoId;
 
-    // Para definir quais pontos de parada são instituições de ensino
+    private EnderecoDto endereco;
+    private InstituicaoDto instituicao;
+
+    private Long enderecoId;
     private Long instituicaoId;
 
-    // Para adicionar ponto de parada a uma linha de transporte
+    @NotNull(message = "A linha de transporte é um campo obrigatório")
     private Long linhaTransporteId;
 }

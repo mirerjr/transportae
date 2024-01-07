@@ -32,11 +32,14 @@ public class PontoParadaModel {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(length = 50)
+    @Column(length = 50, nullable = false)
     private String nome;
 
-    @Column
-    private LocalTime horarioPrevisto;
+    @Column(nullable = false)
+    private LocalTime horarioPrevistoIda;
+
+    @Column(nullable = false)
+    private LocalTime horarioPrevistoVolta;
 
     @CreationTimestamp
     private LocalDateTime dataCadastro;
