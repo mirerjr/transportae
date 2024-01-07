@@ -60,6 +60,6 @@ public class LinhaTransporteModel {
     @OneToMany(mappedBy = "linhaTransporte")
     List<UsuarioLinhaModel> usuariosLinha;
 
-    @OneToMany(mappedBy = "linhaVinculada")
-    List<UsuarioModel> alunos;
+    @OneToMany(mappedBy = "linhaTransporte")
+    List<PontoParadaModel> pontos;
 }
