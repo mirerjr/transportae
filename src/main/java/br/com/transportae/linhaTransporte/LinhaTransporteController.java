@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
+import br.com.transportae.pontoParada.PontoParadaService;
 import br.com.transportae.usuario.UsuarioService;
 import br.com.transportae.usuarioLinha.UsuarioLinhaModel;
 import br.com.transportae.usuarioLinha.UsuarioLinhaService;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
-// TODO: Criar endpoints para vincular alunos e pontos
 @RestController
 @RequestMapping("/api/v1/linhas")
 @EnableMethodSecurity(securedEnabled = true)
@@ -31,6 +31,7 @@ public class LinhaTransporteController {
 
     private final LinhaTransporteService linhaTransporteService;
     private final UsuarioLinhaService usuarioLinhaService;
+    private final PontoParadaService pontoParadaService;
     private final UsuarioService usuarioService;
 
     @PostMapping
@@ -77,6 +78,14 @@ public class LinhaTransporteController {
             .listarUsuariosPorLinha(id).stream()
             .map(UsuarioLinhaModel::getUsuario)
             .map(usuarioService::converterDomainParaDto)
+            .toList());
+    }
+
+    @GetMapping("/{id}/pontos-parada")
+    public ResponseEntity<?> exibirPontosParada(@PathVariable Long id) {
+        return ResponseEntity.ok(pontoParadaService
+            .listarPontosParadaPorLinha(id, "ASC").stream()
+            .map(pontoParadaService::converterDomainParaDto)
             .toList());
     }
 
