@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import br.com.transportae.linhaTransporte.LinhaTransporteModel;
 import br.com.transportae.usuario.UsuarioModel;
 
-public interface IUsuarioLinhaRepository extends JpaRepository<UsuarioLinhaModel, Long> {
+public interface UsuarioLinhaRepository extends JpaRepository<UsuarioLinhaModel, Long> {
 
     List<UsuarioLinhaModel> findAllByLinhaTransporteIdOrderByPerfilLinhaDesc(Long id);
     List<UsuarioLinhaModel> findAllByLinhaTransporteIdAndPerfilLinha(Long id, PerfilLinha perfilLinha);

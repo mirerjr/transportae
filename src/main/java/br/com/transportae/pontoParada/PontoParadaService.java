@@ -26,7 +26,7 @@ import net.datafaker.Faker;
 @RequiredArgsConstructor
 public class PontoParadaService {
 
-    private final IPontoParadaRepository pontoParadaRepository;
+    private final PontoParadaRepository pontoParadaRepository;
     private final EnderecoService enderecoService;
     private final InstituicaoService instituicaoService;
     private final LinhaTransporteService linhaTransporteService;

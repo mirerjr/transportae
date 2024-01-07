@@ -25,7 +25,7 @@ import net.datafaker.providers.base.University;
 public class InstituicaoService {
 
     private final EnderecoService enderecoService;
-    private final IInstituicaoRepository instituicaoRepository;
+    private final InstituicaoRepository instituicaoRepository;
 
     public InstituicaoModel cadastrarInstituicao(InstituicaoDto instituicaoDto) {
         if (isInstituicaoExistente(instituicaoDto.getId())) {

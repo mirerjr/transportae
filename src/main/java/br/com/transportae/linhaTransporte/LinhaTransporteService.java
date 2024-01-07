@@ -19,7 +19,7 @@ import net.datafaker.Faker;
 @RequiredArgsConstructor
 public class LinhaTransporteService {
 
-    private final ILinhaTransporteRepository linhaTransporteRepository;
+    private final LinhaTransporteRepository linhaTransporteRepository;
 
     @Transactional
     public LinhaTransporteModel cadastrarLinhaTransporte(LinhaTransporteDto linhaTransporteDto) {

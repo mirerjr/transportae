@@ -44,7 +44,7 @@ public class UsuarioService {
     private final AutenticacaoService autenticacaoService;
 
     @Autowired
-    private IUsuarioRepository usuarioRepository;
+    private UsuarioRepository usuarioRepository;
 
     @Transactional
     public UsuarioDto cadastrarUsuario(UsuarioDto usuarioDto) {

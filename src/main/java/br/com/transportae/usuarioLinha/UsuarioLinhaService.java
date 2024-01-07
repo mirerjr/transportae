@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UsuarioLinhaService {
 
-    private final IUsuarioLinhaRepository usuarioLinhaRepository;
+    private final UsuarioLinhaRepository usuarioLinhaRepository;
     private final LinhaTransporteService linhaTransporteService;
 
     public UsuarioLinhaModel vincularUsuarioLinha(UsuarioModel usuario, Long linhaId) {

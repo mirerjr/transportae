@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.transportae.config.JwtService;
-import br.com.transportae.usuario.IUsuarioRepository;
+import br.com.transportae.usuario.UsuarioRepository;
 import br.com.transportae.usuario.UsuarioModel;
 import br.com.transportae.usuario.exceptions.UsuarioExistenteException;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AutenticacaoService {
 
-    private final IUsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;

@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EnderecoService {
 
-    private final IEnderecoRepository enderecoRepository;
+    private final EnderecoRepository enderecoRepository;
     
     public EnderecoModel cadastrarEndereco(EnderecoDto endereco) {       
         if (isEnderecoExistente(endereco.getId())) {

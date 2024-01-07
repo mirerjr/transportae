@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class EmailService {
 
     @Autowired
-    private IEmailRepository emailRepository;
+    private EmailRepository emailRepository;
     
     @Autowired
     private JavaMailSender emailSender;

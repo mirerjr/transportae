@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ILinhaTransporteRepository extends JpaRepository<LinhaTransporteModel, Long> {
+public interface LinhaTransporteRepository extends JpaRepository<LinhaTransporteModel, Long> {
 
     Optional<LinhaTransporteModel> findById(Long id);
     

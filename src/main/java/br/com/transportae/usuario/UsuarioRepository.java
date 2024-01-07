@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 
-public interface IUsuarioRepository extends JpaRepository<UsuarioModel, Long> {
+public interface UsuarioRepository extends JpaRepository<UsuarioModel, Long> {
     
     Optional<UsuarioModel> findById(Long id);
     Optional<UsuarioModel> findByCpf(String cpf);
