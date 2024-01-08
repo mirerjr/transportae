@@ -30,6 +30,8 @@ public class ItinerarioStatusModel {
 
     @Enumerated(EnumType.STRING)
     private TipoItinerarioStatus tipoItinerarioStatus;
+
+    private String mensagem;
     
     @CreationTimestamp
     private LocalDateTime data;
