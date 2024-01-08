@@ -1,4 +1,4 @@
-package br.com.transportae.itinerario;
+package br.com.transportae.Itinerario;
 
 import java.time.LocalDateTime;
 import java.util.List;
