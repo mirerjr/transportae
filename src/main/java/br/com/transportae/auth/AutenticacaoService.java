@@ -2,6 +2,7 @@ package br.com.transportae.auth;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,7 +37,8 @@ public class AutenticacaoService {
             .findByEmail(request.getEmail())
             .orElseThrow(() -> new UsuarioExistenteException("Usuário não encontrado"));
 
-        String jwtToken = jwtService.gerarToken(usuarioEncontrado);
+        Map<String, Object> claims = Map.of("id", usuarioEncontrado.getId());
+        String jwtToken = jwtService.gerarToken(usuarioEncontrado, claims);
 
         if (!usuarioEncontrado.isEmailVerificado()) {
             return AutenticacaoResponse.builder()
