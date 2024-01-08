@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.transportae.linhaTransporte.LinhaTransporteModel;
 import br.com.transportae.linhaTransporte.LinhaTransporteService;
+import br.com.transportae.usuario.Perfil;
 import br.com.transportae.usuario.UsuarioModel;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -71,5 +72,9 @@ public class UsuarioLinhaService {
 
     public Integer contarUsuariosPorLinha(Long id) {
         return usuarioLinhaRepository.countByLinhaTransporteId(id);
+    }
+
+    public List<UsuarioLinhaModel> listarUsuariosPorLinhaEPerfil(Long id, Perfil perfil) {
+        return usuarioLinhaRepository.findAllByLinhaTransporteIdAndPerfilLinha(id, PerfilLinha.valueOf(perfil.name()));
     }    
 }

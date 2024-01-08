@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.web.bind.annotation.*;
 
 import br.com.transportae.pontoParada.PontoParadaService;
+import br.com.transportae.usuario.Perfil;
 import br.com.transportae.usuario.UsuarioService;
 import br.com.transportae.usuarioLinha.UsuarioLinhaModel;
 import br.com.transportae.usuarioLinha.UsuarioLinhaService;
@@ -73,9 +74,15 @@ public class LinhaTransporteController {
     }
 
     @GetMapping("/{id}/usuarios")
-    public ResponseEntity<?> exibirUsuarios(@PathVariable Long id) {
-        return ResponseEntity.ok(usuarioLinhaService
-            .listarUsuariosPorLinha(id).stream()
+    public ResponseEntity<?> exibirUsuarios(
+        @PathVariable Long id,
+        @RequestParam(name = "perfil", defaultValue = "") Perfil perfil
+    ) {
+        List<UsuarioLinhaModel> usuarios = Objects.nonNull(perfil)
+            ? usuarioLinhaService.listarUsuariosPorLinhaEPerfil(id, perfil)
+            : usuarioLinhaService.listarUsuariosPorLinha(id);
+
+        return ResponseEntity.ok(usuarios.stream()
             .map(UsuarioLinhaModel::getUsuario)
             .map(usuarioService::converterDomainParaDto)
             .toList());
