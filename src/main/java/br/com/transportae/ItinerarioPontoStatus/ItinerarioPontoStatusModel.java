@@ -9,6 +9,8 @@ import br.com.transportae.ItinerarioPonto.ItinerarioPontoModel;
 import br.com.transportae.usuario.UsuarioModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,8 +34,8 @@ public class ItinerarioPontoStatusModel {
     @Column(length = 50)
     private String nome;
 
-    @Column
-    private boolean confirmado;
+    @Enumerated(EnumType.STRING)
+    private TipoItinerarioPontoStatus status;
 
     @CreationTimestamp
     private LocalDateTime dataCadastro;
