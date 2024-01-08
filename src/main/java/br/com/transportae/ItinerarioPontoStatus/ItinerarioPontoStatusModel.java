@@ -31,9 +31,6 @@ public class ItinerarioPontoStatusModel {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(length = 50)
-    private String nome;
-
     @Enumerated(EnumType.STRING)
     private TipoItinerarioPontoStatus status;
 

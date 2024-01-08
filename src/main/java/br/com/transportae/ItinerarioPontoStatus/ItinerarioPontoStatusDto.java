@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 public class ItinerarioPontoStatusDto {
 
     private Long id;
-    private String nome;
 
     @Enumerated(EnumType.STRING)
     private TipoItinerarioPontoStatus status;
