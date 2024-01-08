@@ -1,4 +1,4 @@
-package br.com.transportae.linhaTransporte;
+package br.com.transportae.itinerario;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -6,9 +6,8 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import br.com.transportae.itinerario.ItinerarioModel;
-import br.com.transportae.pontoParada.PontoParadaModel;
-import br.com.transportae.usuarioLinha.UsuarioLinhaModel;
+import br.com.transportae.ItinerarioStatus.ItinerarioStatusModel;
+import br.com.transportae.linhaTransporte.LinhaTransporteModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,6 +16,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,45 +24,30 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@Entity(name = "linha_transporte")
+@Entity(name = "itinerario")
 @AllArgsConstructor
 @NoArgsConstructor
-public class LinhaTransporteModel {
+public class ItinerarioModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Builder.Default
-    private boolean ativa = false;
-
-    @Column(nullable = false)
-    private String nome;
-    
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Turno turno;
-
-    @Column(nullable = false)
-    private Short totalAssentos;
-    
+    @Column(length = 10)
     private String codigoVeiculo;
-    
-    @Column
-    private LocalDateTime ativadaEm;
+
+    @Enumerated(EnumType.STRING)
+    TipoItinerario tipoItinerario;
 
     @CreationTimestamp
     private LocalDateTime dataCadastro;
 
     @UpdateTimestamp
     private LocalDateTime dataAtualizacao;
-    
-    @OneToMany(mappedBy = "linhaTransporte")
-    List<UsuarioLinhaModel> usuariosLinha;
 
-    @OneToMany(mappedBy = "linhaTransporte")
-    List<PontoParadaModel> pontos;
+    @OneToOne
+    private LinhaTransporteModel linhaTransporte;
 
-    @OneToMany(mappedBy = "linhaTransporte")
-    List<ItinerarioModel> itinerarios;
+    @OneToMany(mappedBy = "itinerario")
+    private List<ItinerarioStatusModel> status;
 }
