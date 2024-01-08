@@ -82,6 +82,10 @@ public class UsuarioController {
             .listarLinhasPorUsuario(id).stream()
             .map(UsuarioLinhaModel::getLinhaTransporte)
             .map(linhaTransporteService::converterDomainParaDto)
+            .map(linhaDto -> {
+                linhaDto.setTotalUsuarios(usuarioLinhaService.contarUsuariosPorLinha(linhaDto.getId()));
+                return linhaDto;
+            })
             .toList()            
         );
     }
