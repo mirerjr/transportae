@@ -1,5 +1,6 @@
 package br.com.transportae.Itinerario;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.transportae.ItinerarioStatus.ItinerarioStatusDto;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -51,5 +53,10 @@ public class ItinerarioController {
     public ItinerarioDto exibir(@PathVariable Long id) {
         ItinerarioModel itinerario = itinerarioService.getItinerario(id);
         return itinerarioService.converterDomainParaDto(itinerario);
+    }
+
+    @GetMapping("/{id}/status")
+    public ResponseEntity<List<ItinerarioStatusDto>> exibirStatus(@PathVariable Long id) {
+        return ResponseEntity.ok(itinerarioService.listarItinerarioStatusPorItinerario(id));
     }
 }

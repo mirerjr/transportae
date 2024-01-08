@@ -1,5 +1,6 @@
 package br.com.transportae.Itinerario;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.BeanUtils;
@@ -7,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import br.com.transportae.ItinerarioStatus.ItinerarioStatusDto;
+import br.com.transportae.ItinerarioStatus.ItinerarioStatusService;
 import br.com.transportae.linhaTransporte.LinhaTransporteModel;
 import br.com.transportae.linhaTransporte.LinhaTransporteService;
 import jakarta.persistence.EntityNotFoundException;
@@ -19,6 +22,7 @@ public class ItinerarioService {
 
     private final ItinerarioRepository itinerarioRepository;
     private final LinhaTransporteService linhaTransporteService;
+    private final ItinerarioStatusService itinerarioStatusService;
 
     @Transactional
     public ItinerarioModel cadastrarItinerario(ItinerarioDto itinerarioDto) {
@@ -72,6 +76,12 @@ public class ItinerarioService {
             : itinerarioRepository.findAll(pagina);
 
         return itinerarios;
+    }
+
+    public List<ItinerarioStatusDto> listarItinerarioStatusPorItinerario(Long id) {
+        return itinerarioStatusService.listarItinerarioStatusPorItinerario(id).stream()
+            .map(itinerarioStatusService::converterDomainParaDto)
+            .toList();
     }
 
     
