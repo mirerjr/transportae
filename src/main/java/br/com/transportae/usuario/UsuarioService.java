@@ -190,6 +190,34 @@ public class UsuarioService {
         usuarioRepository.save(admin);
 	}
 
+    public UsuarioModel cadastrarUsuarioAluno() {
+        UsuarioModel aluno = UsuarioModel.builder()
+            .perfil(Perfil.ALUNO)
+            .nome("Mirer Aluno")
+            .email("mirer.junior02@academico.ifs.edu.br")
+            .telefone("(11) 11111-1111")
+            .cpf("11111111111")
+            .senha("$2a$12$FJve86hShTAnCXXjHjVHNOB7nA7B/0DEc.jeUGzP3TcQYqPehFl.a")
+            .emailVerificado(true)
+            .build();
+
+        return usuarioRepository.save(aluno);
+    }
+
+    public UsuarioModel cadastrarUsuarioMotorista() {
+        UsuarioModel aluno = UsuarioModel.builder()
+            .perfil(Perfil.MOTORISTA)
+            .nome("Mirer Motorista")
+            .email("mirer.motorista@gmail.com")
+            .telefone("(22) 22222-2222")
+            .cpf("22222222222")
+            .senha("$2a$12$FJve86hShTAnCXXjHjVHNOB7nA7B/0DEc.jeUGzP3TcQYqPehFl.a")
+            .emailVerificado(true)
+            .build();
+
+        return usuarioRepository.save(aluno);
+    }
+
     public List<UsuarioModel> cadastrarUsuarioMock(int quantidade) {
         Faker faker = new Faker(Locale.forLanguageTag("pt-BR"));
         List<UsuarioModel> usuarios = new ArrayList<>();
@@ -203,10 +231,10 @@ public class UsuarioService {
                 .toLocalDate();
 
             String matricula = LocalDate.now().getYear() + "" + faker.number().digits(6);
-            Perfil perfil = faker.bool().bool() ? Perfil.ALUNO : Perfil.MOTORISTA;
+            // Perfil perfil = faker.bool().bool() ? Perfil.ALUNO : Perfil.MOTORISTA;
 
             UsuarioModel usuario = UsuarioModel.builder()
-                .perfil(perfil)
+                .perfil(Perfil.ALUNO)
                 .nome(nomeCompleto)
                 .email(formatEmailMock(nomeCompleto))
                 .telefone(faker.phoneNumber().cellPhone())

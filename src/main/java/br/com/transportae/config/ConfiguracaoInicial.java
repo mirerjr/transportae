@@ -32,6 +32,9 @@ public class ConfiguracaoInicial {
     public void iniciar() {
         if (!usuarioService.hasUsuarioAdmin()) {
             usuarioService.cadastrarUsuarioAdmin();
+            
+            UsuarioModel aluno = usuarioService.cadastrarUsuarioAluno();
+            UsuarioModel motorista = usuarioService.cadastrarUsuarioMotorista();
 
             List<UsuarioModel> usuarios = usuarioService.cadastrarUsuarioMock(20);
             List<InstituicaoModel> instituicoes = instituicaoService.cadastrarInstituicaoMock(5);
@@ -40,6 +43,9 @@ public class ConfiguracaoInicial {
             Faker faker = new Faker();
 
             linhas.forEach(linha -> {
+                usuarioLinhaService.vincularUsuarioLinha(aluno, linha.getId());
+                usuarioLinhaService.vincularUsuarioLinha(motorista, linha.getId());
+
                 List<PontoParadaModel> pontosParada = pontoParadaService.cadastrarPontoParadaMock(faker.number().numberBetween(5, 10));
                 pontosParada.forEach(pontoParada -> pontoParadaService.vincularLinhaTransporte(pontoParada, linha));
             });
