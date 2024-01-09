@@ -137,4 +137,14 @@ public class PontoParadaService {
         pontoParada.setLinhaTransporte(linha);
         return pontoParadaRepository.save(pontoParada);
     }
+
+    public PontoParadaModel getPrimeiroPontoIda(LinhaTransporteModel linhaTransporte) {
+        return pontoParadaRepository.findFirstByLinhaTransporteIdOrderByHorarioPrevistoIdaAsc(linhaTransporte.getId())
+            .orElseThrow(() -> new EntityNotFoundException("Ponto de parada não encontrado"));
+    }
+
+    public PontoParadaModel getPrimeiroPontoVolta(LinhaTransporteModel linhaTransporte) {
+        return pontoParadaRepository.findFirstByLinhaTransporteIdOrderByHorarioPrevistoIdaAsc(linhaTransporte.getId())
+            .orElseThrow(() -> new EntityNotFoundException("Ponto de parada não encontrado"));
+    }
 }
