@@ -14,6 +14,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,9 +41,9 @@ public class ItinerarioPontoStatusModel {
     @UpdateTimestamp
     private LocalDateTime dataAtualizacao;
     
-    @OneToOne
+    @ManyToOne
     private ItinerarioPontoModel itinerarioPonto;
 
-    @OneToOne
+    @ManyToOne
     private UsuarioModel usuario;
 }
