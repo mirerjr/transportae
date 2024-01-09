@@ -30,6 +30,7 @@ public class UsuarioDto {
     private Long id;
     private String matricula;
     private String telefone;
+    private Boolean emailVerificado;
 
     @Past(message = "A data de nascimento deve estar no passado")
     private LocalDate dataNascimento;
