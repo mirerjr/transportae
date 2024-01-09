@@ -1,4 +1,12 @@
+server:
+    port: 8080
+    address: localhost
 spring:
+    application:
+        name: transportae-core
+    cloud:
+        discovery:
+            enabled: true
     datasource:
         url: jdbc:postgresql://localhost:5432/transportae
         username: postgres
