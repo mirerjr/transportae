@@ -1,5 +1,6 @@
 package br.com.transportae.Itinerario;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,11 +14,14 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.transportae.ItinerarioStatus.ItinerarioStatusDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -30,8 +34,8 @@ public class ItinerarioController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('MOTORISTA')")
-    public ItinerarioDto cadastrar(ItinerarioDto itinerarioDto) {
-        ItinerarioModel itinerario = itinerarioService.cadastrarItinerario(itinerarioDto);
+    public ItinerarioDto cadastrar(@RequestBody @Valid ItinerarioDto itinerarioDto, Principal principal) {
+        ItinerarioModel itinerario = itinerarioService.cadastrarItinerario(itinerarioDto, principal);
         return itinerarioService.converterDomainParaDto(itinerario);
     }
 
@@ -58,5 +62,11 @@ public class ItinerarioController {
     @GetMapping("/{id}/status")
     public ResponseEntity<List<ItinerarioStatusDto>> exibirStatus(@PathVariable Long id) {
         return ResponseEntity.ok(itinerarioService.listarItinerarioStatusPorItinerario(id));
+    }
+
+    @PutMapping("/{id}/concluir")
+    @PreAuthorize("hasAuthority('MOTORISTA')")
+    public ResponseEntity<ItinerarioStatusDto> concluir(@PathVariable Long id) {
+        return itinerarioService.concluirItinerario(id);
     }
 }
