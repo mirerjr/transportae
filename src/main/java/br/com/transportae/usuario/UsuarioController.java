@@ -144,6 +144,6 @@ public class UsuarioController {
     ) {      
         return ResponseEntity.ok(itinerarioService
             .listarItinerariosPorUsuario(pageable, id, pesquisa)
-            .map(itinerarioService::converterDomainParaDto));
+            .map(itinerarioService::converterDomainParaDto).toList());
     }
 }
