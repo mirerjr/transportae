@@ -49,9 +49,13 @@ public class SecurityConfiguration {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         
-        config.setAllowedOrigins(Arrays.asList("http://localhost:4000/"));
-        config.setAllowedMethods(Arrays.asList("OPTIONS", "GET" ,"POST", "PUT", "PATCH", "DELETE"));
-        config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
+        // config.setAllowedOrigins(Arrays.asList("http://localhost:4000/"));
+        // config.setAllowedMethods(Arrays.asList("OPTIONS", "GET" ,"POST", "PUT", "PATCH", "DELETE"));
+        // config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
+
+        config.setAllowedOrigins(Arrays.asList("*"));
+        config.setAllowedMethods(Arrays.asList("*"));
+        config.setAllowedHeaders(Arrays.asList("*"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
