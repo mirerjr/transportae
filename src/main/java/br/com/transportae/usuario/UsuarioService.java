@@ -161,9 +161,8 @@ public class UsuarioService {
         return usuarioDto;
     }
 
-    public UsuarioDto getUsuarioLogado(Principal principal) {
-        UsuarioModel usuarioModel = autenticacaoService.getUsuarioLogado(principal);
-        return converterDomainParaDto(usuarioModel);
+    public UsuarioModel getUsuarioLogado(Principal principal) {
+        return autenticacaoService.getUsuarioLogado(principal);
     }
 
     public Boolean isUsuarioCadastrado(String email, String cpf) {

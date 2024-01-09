@@ -107,8 +107,8 @@ public class UsuarioController {
 
     @GetMapping("/logado")
     public ResponseEntity<UsuarioDto> getUsuarioLogado(Principal principal) {
-        UsuarioDto usuarioLogado = usuarioService.getUsuarioLogado(principal);
-        return ResponseEntity.ok().body(usuarioLogado);
+        UsuarioModel usuarioLogado = usuarioService.getUsuarioLogado(principal);
+        return ResponseEntity.ok(usuarioService.converterDomainParaDto(usuarioLogado));
     }
 
     @PutMapping("/{id}")
