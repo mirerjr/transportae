@@ -1,5 +1,9 @@
 package br.com.transportae.linhaTransporte;
 
+import java.time.LocalDateTime;
+
+import br.com.transportae.Itinerario.ItinerarioDto;
+import br.com.transportae.pontoParada.PontoParadaDto;
 import br.com.transportae.usuario.UsuarioDto;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -32,8 +36,9 @@ public class LinhaTransporteDto {
     private Short totalAssentos;
     
     private String codigoVeiculo;
-
-
     private Integer totalUsuarios;
+
+    private ItinerarioDto ultimoItinerarioHoje;
+    private LocalDateTime horarioProximoItinerario;
     //TODO Retornar quantitativo de pontos vinculados
 }

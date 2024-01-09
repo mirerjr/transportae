@@ -13,6 +13,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
+import br.com.transportae.Itinerario.ItinerarioDto;
+import br.com.transportae.Itinerario.ItinerarioModel;
+import br.com.transportae.Itinerario.ItinerarioService;
+import br.com.transportae.ItinerarioStatus.TipoItinerarioStatus;
 import br.com.transportae.pontoParada.PontoParadaService;
 import br.com.transportae.usuario.Perfil;
 import br.com.transportae.usuario.UsuarioService;
@@ -20,8 +24,6 @@ import br.com.transportae.usuarioLinha.UsuarioLinhaModel;
 import br.com.transportae.usuarioLinha.UsuarioLinhaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -33,6 +35,7 @@ public class LinhaTransporteController {
     private final LinhaTransporteService linhaTransporteService;
     private final UsuarioLinhaService usuarioLinhaService;
     private final PontoParadaService pontoParadaService;
+    private final ItinerarioService itinerarioService;
     private final UsuarioService usuarioService;
 
     @PostMapping
@@ -94,6 +97,31 @@ public class LinhaTransporteController {
             .listarPontosParadaPorLinha(id, "ASC").stream()
             .map(pontoParadaService::converterDomainParaDto)
             .toList());
+    }
+
+    @GetMapping("/{id}/itinerarios")
+    public ResponseEntity<?> listarItinerarios(
+        @PathVariable Long id,
+        @PageableDefault(page = 0, size = 10, sort = "dataCadastro", direction = Direction.DESC) Pageable pageable,
+        @RequestParam(name = "search", defaultValue = "") String pesquisa
+
+    ) {      
+        return ResponseEntity.ok(itinerarioService
+            .listarItinerariosPorLinha(pageable, id, pesquisa)
+            .map(itinerarioService::converterDomainParaDto));
+    }
+    
+    @GetMapping("/{id}/itinerarios/status")
+    public ResponseEntity<?> exibirItinerarioPorStatus(
+        @PathVariable Long id,
+        @RequestParam(name = "status") TipoItinerarioStatus status
+    ) {
+
+        ItinerarioModel itinerario = itinerarioService.getItinerarioIniciadoPorLinha(id).orElse(null);
+
+        return Objects.nonNull(itinerario)
+            ? ResponseEntity.ok(itinerarioService.converterDomainParaDto(itinerario))
+            : ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
