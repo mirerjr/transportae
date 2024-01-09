@@ -2,8 +2,10 @@ package br.com.transportae;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
+@EnableDiscoveryClient
 public class TransportaeApplication {
 
 	public static void main(String[] args) {
