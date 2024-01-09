@@ -1,10 +1,14 @@
 package br.com.transportae.ItinerarioPontoStatus;
 
+import java.util.List;
+import java.util.Objects;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import br.com.transportae.ItinerarioPonto.ItinerarioPontoModel;
 import br.com.transportae.ItinerarioPonto.ItinerarioPontoService;
+import br.com.transportae.usuario.UsuarioDto;
 import br.com.transportae.usuario.UsuarioModel;
 import br.com.transportae.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +30,11 @@ public class ItinerarioPontoStatusService {
         return itinerarioPontoStatusRepository.save(novoItinerarioPontoStatus);
     }
 
+    public List<ItinerarioPontoStatusModel> getConfirmacoesUsuarioPorItinerarioPonto(ItinerarioPontoModel itinerarioPonto) {
+        return itinerarioPontoStatusRepository.findAllByItinerarioPontoAndUsuarioStatus(
+            itinerarioPonto, List.of(TipoItinerarioPontoStatus.ALUNO_DESMARCOU, TipoItinerarioPontoStatus.ALUNO_PRESENTE));
+    }
+
     public ItinerarioPontoStatusModel converterDtoParaDomain(ItinerarioPontoStatusDto itinerarioPontoStatusDto) {
         ItinerarioPontoStatusModel itinerarioPontoStatus = ItinerarioPontoStatusModel.builder()
             .id(itinerarioPontoStatusDto.getId())
@@ -40,6 +49,11 @@ public class ItinerarioPontoStatusService {
     public ItinerarioPontoStatusDto converterDomainParaDto(ItinerarioPontoStatusModel itinerarioPontoStatus) {
         ItinerarioPontoStatusDto itinerarioPontoStatusDto = new ItinerarioPontoStatusDto();
         BeanUtils.copyProperties(itinerarioPontoStatus, itinerarioPontoStatusDto);
+
+        if (Objects.nonNull(itinerarioPontoStatus.getUsuario())) {
+            UsuarioDto usuario = usuarioService.converterDomainParaDto(itinerarioPontoStatus.getUsuario());
+            itinerarioPontoStatusDto.setUsuario(usuario);
+        }
 
         return itinerarioPontoStatusDto;
     }

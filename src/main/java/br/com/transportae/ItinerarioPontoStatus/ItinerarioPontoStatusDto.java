@@ -2,6 +2,7 @@ package br.com.transportae.ItinerarioPontoStatus;
 
 import java.time.LocalDateTime;
 
+import br.com.transportae.usuario.UsuarioDto;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
@@ -21,8 +22,10 @@ public class ItinerarioPontoStatusDto {
     private TipoItinerarioPontoStatus status;
 
     private Long itinerarioPontoId;
-    private Long usuarioId;
 
+    private UsuarioDto usuario;
+    
+    private Long usuarioId;
     private String usuarioNome;
     private LocalDateTime dataCadastro;
     private LocalDateTime dataAtualizacao;

@@ -1,8 +1,11 @@
 package br.com.transportae.ItinerarioPonto;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.transportae.ItinerarioPontoStatus.ItinerarioPontoStatusDto;
+import br.com.transportae.ItinerarioPontoStatus.ItinerarioPontoStatusService;
+import br.com.transportae.usuario.UsuarioDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -20,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class ItinerarioPontoController {
 
     private final ItinerarioPontoService itinerarioPontoService;
+    private final ItinerarioPontoStatusService itinerarioPontoStatusService;
 
     @PutMapping("/{id}/status")
     @PreAuthorize("hasAuthority('MOTORISTA')")
@@ -29,5 +35,21 @@ public class ItinerarioPontoController {
     ) {
 
         return ResponseEntity.ok(itinerarioPontoService.adicionarPontoStatus(id, itinerarioPontoStatusDto));
+    }
+
+    @PutMapping("/{id}/aluno/status")
+    public ResponseEntity<ItinerarioPontoStatusDto> alterarStatusPontoAluno(
+        @PathVariable Long id, 
+        @RequestBody @Valid ItinerarioPontoStatusDto itinerarioPontoStatusDto
+    ) {
+        return ResponseEntity.ok(itinerarioPontoService.alterarStatusPontoAluno(id, itinerarioPontoStatusDto));
+    }
+
+    @GetMapping("/{id}/alunos")
+    public ResponseEntity<?> getAlunosConfirmados(@PathVariable Long id) {
+        return ResponseEntity.ok(itinerarioPontoService
+            .getAlunosConfirmados(id).stream()
+            .map(itinerarioPontoStatusService::converterDomainParaDto)
+            .toList());
     }
 }

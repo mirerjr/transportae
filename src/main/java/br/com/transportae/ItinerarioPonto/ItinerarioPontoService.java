@@ -2,6 +2,7 @@ package br.com.transportae.ItinerarioPonto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -10,9 +11,14 @@ import br.com.transportae.Itinerario.ItinerarioModel;
 import br.com.transportae.Itinerario.ItinerarioService;
 import br.com.transportae.ItinerarioPontoStatus.ItinerarioPontoStatusDto;
 import br.com.transportae.ItinerarioPontoStatus.ItinerarioPontoStatusModel;
+import br.com.transportae.ItinerarioPontoStatus.ItinerarioPontoStatusRepository;
 import br.com.transportae.ItinerarioPontoStatus.ItinerarioPontoStatusService;
+import br.com.transportae.ItinerarioPontoStatus.TipoItinerarioPontoStatus;
 import br.com.transportae.pontoParada.PontoParadaModel;
 import br.com.transportae.pontoParada.PontoParadaService;
+import br.com.transportae.usuario.UsuarioDto;
+import br.com.transportae.usuario.UsuarioModel;
+import br.com.transportae.usuario.UsuarioService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +28,10 @@ import lombok.RequiredArgsConstructor;
 public class ItinerarioPontoService {
 
     private final ItinerarioPontoRepository itinerarioPontoRepository;
+    private final ItinerarioPontoStatusRepository itinerarioPontoStatusRepository;
     private final ItinerarioPontoStatusService itinerarioPontoStatusService;
     private final PontoParadaService pontoParadaService;
+    private final UsuarioService usuarioService;
 
     public List<ItinerarioPontoModel> cadastrarPontosDoItinerario(ItinerarioModel itinerario) {
         List<ItinerarioPontoModel> itinerarioPontos = new ArrayList<>();
@@ -71,5 +79,48 @@ public class ItinerarioPontoService {
         ItinerarioPontoStatusModel itinerarioPontoStatus = itinerarioPontoStatusService.cadastrarItinerarioPontoStatus(itinerarioPontoStatusDto, itinerarioPonto);
 
         return itinerarioPontoStatusService.converterDomainParaDto(itinerarioPontoStatus);        
+    }
+
+    // TODO: Revisar lógica, pois o status devem ser sequenciais e não podem ser modificados
+    public ItinerarioPontoStatusDto alterarStatusPontoAluno(Long id, ItinerarioPontoStatusDto itinerarioPontoStatusDto) {
+        ItinerarioPontoModel itinerarioPonto = getItinerarioPonto(id);
+        UsuarioModel usuario = usuarioService.getUsuario(itinerarioPontoStatusDto.getUsuarioId());
+
+        ItinerarioPontoStatusModel ultimoStatus = itinerarioPontoStatusRepository.findLatestByItinerarioPontoAndUsuario(itinerarioPonto, usuario);
+
+        if (ultimoStatus == null) {
+            itinerarioPontoStatusDto.setStatus(itinerarioPontoStatusDto.getStatus());
+            
+        } else {
+            // Optional<ItinerarioPontoStatusModel> pontoStatusOpt = Optional.empty();
+
+            // if (itinerarioPontoStatusDto.getId() != null) {
+            //     pontoStatusOpt = itinerarioPontoStatusRepository.findById(itinerarioPontoStatusDto.getId());
+            // }
+
+            // if (pontoStatusOpt.isPresent()) {
+            //     ItinerarioPontoStatusModel pontoStatus = pontoStatusOpt.get();
+            //     pontoStatus.setStatus(itinerarioPontoStatusDto.getStatus());
+
+            //     ItinerarioPontoStatusModel pontoStatusAtualizado = itinerarioPontoStatusRepository.save(pontoStatus);
+            //     return itinerarioPontoStatusService.converterDomainParaDto(pontoStatusAtualizado);
+
+            // } else
+            
+            if (ultimoStatus.getStatus().equals(TipoItinerarioPontoStatus.ALUNO_PRESENTE)) {
+                itinerarioPontoStatusDto.setStatus(TipoItinerarioPontoStatus.ALUNO_DESMARCOU);
+
+            } else if (ultimoStatus.getStatus().equals(TipoItinerarioPontoStatus.ALUNO_DESMARCOU)) {
+                itinerarioPontoStatusDto.setStatus(TipoItinerarioPontoStatus.ALUNO_PRESENTE);
+            }
+        }
+
+        ItinerarioPontoStatusModel itinerarioPontoStatus = itinerarioPontoStatusService.cadastrarItinerarioPontoStatus(itinerarioPontoStatusDto, itinerarioPonto);
+        return itinerarioPontoStatusService.converterDomainParaDto(itinerarioPontoStatus);
+    }
+
+    public List<ItinerarioPontoStatusModel> getAlunosConfirmados(Long id) {
+        ItinerarioPontoModel itinerarioPonto = getItinerarioPonto(id);
+        return itinerarioPontoStatusService.getConfirmacoesUsuarioPorItinerarioPonto(itinerarioPonto);
     }
 }
