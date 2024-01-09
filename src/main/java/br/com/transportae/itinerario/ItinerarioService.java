@@ -6,14 +6,22 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.util.Streamable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import br.com.transportae.ItinerarioPonto.ItinerarioPontoModel;
 import br.com.transportae.ItinerarioPonto.ItinerarioPontoService;
+import br.com.transportae.ItinerarioPontoStatus.ItinerarioPontoStatusModel;
+import br.com.transportae.ItinerarioPontoStatus.ItinerarioPontoStatusRepository;
+import br.com.transportae.ItinerarioPontoStatus.ItinerarioPontoStatusService;
 import br.com.transportae.ItinerarioStatus.ItinerarioStatusDto;
 import br.com.transportae.ItinerarioStatus.ItinerarioStatusModel;
 import br.com.transportae.ItinerarioStatus.ItinerarioStatusService;
@@ -35,6 +43,7 @@ public class ItinerarioService {
     private final LinhaTransporteService linhaTransporteService;
     private final ItinerarioStatusService itinerarioStatusService;
     private final ItinerarioPontoService itinerarioPontoService;
+    private final ItinerarioPontoStatusRepository itinerarioPontoStatusRepository;
     private final UsuarioService usuarioService;
 
     @Transactional
@@ -150,5 +159,22 @@ public class ItinerarioService {
         LocalDateTime finalDoDia = hoje.atTime(23, 59, 59);
 
         return itinerarioRepository.findFirstByLinhaTransporteAndDataCadastroBetweenOrderByDataCadastroDesc(linhaTransporte, inicioDoDia, finalDoDia);
+    }
+
+    public Page<ItinerarioModel> listarItinerariosPorUsuario(Pageable pageable, Long id, String pesquisa) {
+        UsuarioModel usuario = usuarioService.getUsuario(id);
+
+        List<ItinerarioPontoStatusModel> itinerarioPontoStatuses = itinerarioPontoStatusRepository.findAllByUsuario(usuario);
+
+        List<ItinerarioModel> itinerarios = itinerarioPontoStatuses.stream()
+            .map(ItinerarioPontoStatusModel::getItinerarioPonto)
+            .map(ItinerarioPontoModel::getItinerario)
+            .distinct()
+            .collect(Collectors.toList());
+
+        int inicio = (int) pageable.getOffset();
+        int fim = Math.min((inicio + pageable.getPageSize()), itinerarios.size());
+
+        return new PageImpl<>(itinerarios.subList(inicio, fim), pageable, itinerarios.size());
     }
 }

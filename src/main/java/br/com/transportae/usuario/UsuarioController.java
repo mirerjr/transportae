@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.transportae.Itinerario.ItinerarioService;
 import br.com.transportae.linhaTransporte.LinhaTransporteService;
 import br.com.transportae.usuarioLinha.UsuarioLinhaModel;
 import br.com.transportae.usuarioLinha.UsuarioLinhaService;
@@ -38,6 +39,7 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
     private final UsuarioLinhaService usuarioLinhaService;
     private final LinhaTransporteService linhaTransporteService;
+    private final ItinerarioService itinerarioService;
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -124,5 +126,24 @@ public class UsuarioController {
     public ResponseEntity<Object> liberarAcesso(@PathVariable Long id) {
         usuarioService.liberarAcessoUsuario(id);
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}/ativar")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Object> ativar(@PathVariable Long id) {
+        usuarioService.liberarAcessoUsuario(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/itinerarios")
+    public ResponseEntity<?> listarItinerarios(
+        @PathVariable Long id,
+        @PageableDefault(page = 0, size = 10, sort = "dataCadastro", direction = Direction.DESC) Pageable pageable,
+        @RequestParam(name = "search", defaultValue = "") String pesquisa
+
+    ) {      
+        return ResponseEntity.ok(itinerarioService
+            .listarItinerariosPorUsuario(pageable, id, pesquisa)
+            .map(itinerarioService::converterDomainParaDto));
     }
 }
