@@ -21,6 +21,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import net.datafaker.Faker;
+import net.datafaker.providers.base.Address;
 
 @Service
 @RequiredArgsConstructor
@@ -120,10 +121,25 @@ public class PontoParadaService {
 
             String nomePonto = faker.address().streetName() + " " + faker.address().streetSuffix();
 
+            Address enderecoFaker = faker.address();
+
+            EnderecoModel endereco = EnderecoModel.builder()
+                .descricao(nomePonto)
+                .numero("123")
+                .bairro(enderecoFaker.streetName())
+                .cidade(enderecoFaker.city())
+                .cep(enderecoFaker.zipCode())
+                .latitude(Double.parseDouble(enderecoFaker.latitude()))
+                .longitude(Double.parseDouble(enderecoFaker.longitude()))
+                .build();
+
+            EnderecoModel enderecoSalvo = enderecoService.salvarEndereco(endereco);
+
             PontoParadaModel pontoParada = PontoParadaModel.builder()
                 .nome(nomePonto)
                 .horarioPrevistoIda(horarioPrevistoIda)
                 .horarioPrevistoVolta(horarioPrevistoVolta)
+                .endereco(enderecoSalvo)
                 .build();
 
             PontoParadaModel pontoCadastrado = pontoParadaRepository.save(pontoParada);

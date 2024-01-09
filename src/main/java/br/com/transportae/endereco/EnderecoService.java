@@ -27,6 +27,10 @@ public class EnderecoService {
         return enderecoRepository.save(novoEndereco);
     }
 
+    public EnderecoModel salvarEndereco(EnderecoModel endereco) {
+        return enderecoRepository.save(endereco);
+    }
+
     public EnderecoModel atualizarEndereco(EnderecoDto endereco) {
         EnderecoModel enderecoAtual  = enderecoRepository.findById(endereco.getId())
             .orElseThrow(() -> new EntityNotFoundException("Endereço não encontrado"));
